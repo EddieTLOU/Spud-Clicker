@@ -232,7 +232,15 @@
             if(v === "SMALL") { document.getElementById('main-spud').style.width = "80px"; f = true; }
             if(v === "BIGGIE") { document.getElementById('main-spud').style.width = "700px"; f = true; }
             if(v === "INFLATION") { g.costs = {hoe:1, field:1, factory:1}; f = true; }
-            if(v === "FREEZE") { g.sps = 0; triggerFx('blue'); f = true; }
+            if(v === "FREEZE") { 
+    g.spuds = 0; 
+    g.sps = 0; 
+    g.clickPwr = 1; 
+    g.costs = {hoe: 15, field: 250, factory: 2000}; 
+    triggerFx('blue'); 
+    log("SYSTEM WIPE: Everything reset to zero!"); 
+    f = true; 
+}
             if(v === "ECHO") { setInterval(() => clickSpud(), 1000); f = true; }
 
             if(f) { inp.value = ""; updateUI(); alert("CODE ACCEPTED"); }
