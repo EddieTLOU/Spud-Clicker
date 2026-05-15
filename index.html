@@ -218,6 +218,21 @@
             updateUI();
         }
 
+        function evolve() {
+            if (g.spuds >= 5000) {
+                g.spuds -= 5000;
+                g.rank++;
+                if (g.rank === 2) { g.rName = "Swag Spud"; g.char = "spud_swag.png"; g.clickPwr += 2; }
+                else if (g.rank === 3) { g.rName = "King Spud"; g.char = "spud_king.png"; g.clickPwr += 5; }
+                else { g.rName = "God Spud"; g.char = "spud_gun.png"; g.clickPwr += 10; }
+                triggerFx('gold');
+                alert("EVOLVED TO: " + g.rName);
+                updateUI();
+            } else {
+                alert("Need 5,000 Spuds!");
+            }
+        }
+
         function redeem() {
             const v = document.getElementById('code-entry').value;
             const inp = document.getElementById('code-entry');
@@ -233,14 +248,13 @@
             if(v === "BIGGIE") { document.getElementById('main-spud').style.width = "700px"; f = true; }
             if(v === "1") { g.costs = {hoe:1, field:1, factory:1}; f = true; }
             if(v === "FREEZE") { 
-    g.spuds = 0; 
-    g.sps = 0; 
-    g.clickPwr = 1; 
-    g.costs = {hoe: 15, field: 250, factory: 2000}; 
-    triggerFx('blue'); 
-    log("SYSTEM WIPE: Everything reset to zero!"); 
-    f = true; 
-}
+                g.spuds = 0; 
+                g.sps = 0; 
+                g.clickPwr = 1; 
+                g.costs = {hoe: 15, field: 250, factory: 2000}; 
+                triggerFx('blue'); 
+                f = true; 
+            }
             if(v === "ECHO") { setInterval(() => clickSpud(), 1000); f = true; }
 
             if(f) { inp.value = ""; updateUI(); alert("CODE ACCEPTED"); }
@@ -282,6 +296,7 @@
             document.getElementById('c-field').innerText = g.costs.field.toLocaleString();
             document.getElementById('c-factory').innerText = g.costs.factory.toLocaleString();
             document.getElementById('main-spud').src = g.char;
+            document.getElementById('rank-display').innerText = "Rank: " + g.rName;
         }
 
         function unlockAll() { g.bgs.push({t:'image',v:'bg_meme1.jpg',n:'SHREK'},{t:'image',v:'bg_meme2.jpg',n:'MASHUP'}); alert("Unlocked All!"); }
