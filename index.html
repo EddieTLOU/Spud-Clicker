@@ -10,349 +10,334 @@
     
     <style>
         :root {
-            --dark-background: #0f0a05;
-            --wood-panel: #2d1b0e;
+            --pure-black: #000000;
+            --wood-dark: #1a0f08;
+            --wood-medium: #2d1b0e;
             --potato-gold: #d4af37;
             --creamy-text: #ffcc66;
-            --stop-red: #8b0000;
-            --owner-green: #00ff00;
+            --stop-red: #cc0000;
+            --owner-neon: #00ff41;
         }
 
-        * { box-sizing: border-box; font-family: 'Patrick Hand', cursive; }
+        * { box-sizing: border-box; font-family: 'Patrick Hand', cursive; user-select: none; }
 
         body {
             margin: 0;
-            background-color: var(--dark-background);
+            background-color: var(--pure-black);
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             color: var(--creamy-text);
             height: 100vh;
             overflow: hidden;
-            transition: background 0.5s ease;
+            transition: 0.5s ease;
         }
 
-        /* Gray-out menus */
+        /* --- MENUS --- */
         .overlay-menu {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle, rgba(34, 21, 11, 0.98) 0%, rgba(0, 0, 0, 0.98) 100%);
+            background: var(--pure-black);
             z-index: 1000;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 12px solid var(--wood-panel);
-            overflow-y: auto;
-            padding: 20px;
+            border: 15px solid var(--wood-medium);
+            padding: 40px;
         }
 
         .hidden { display: none !important; }
 
-        .game-title {
-            font-size: 5.5rem;
-            color: var(--potato-gold);
-            margin: 0;
-            text-shadow: 4px 4px 0px #000;
+        /* --- HOME MENU ICONS --- */
+        .top-right-tools {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            display: flex;
+            gap: 12px;
         }
 
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--potato-gold);
+            color: var(--potato-gold);
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: 0.2s;
+        }
+        .icon-btn:hover { background: var(--potato-gold); color: #000; transform: scale(1.1); }
+
         .big-button {
-            background: var(--wood-panel);
+            background: var(--wood-medium);
             border: 4px solid var(--potato-gold);
             color: var(--creamy-text);
             padding: 12px 40px;
             font-size: 1.8rem;
             margin: 8px;
             cursor: pointer;
-            width: 360px;
-            border-radius: 15px;
+            width: 380px;
+            border-radius: 18px;
             transition: 0.2s;
-            text-align: center;
         }
+        .big-button:hover { background: var(--potato-gold); color: #000; }
 
-        .big-button:hover { background: var(--potato-gold); color: #000; transform: scale(1.02); }
-
-        #main-game-screen {
+        /* --- OWNER PANEL --- */
+        .owner-window {
+            background: #080808;
+            border: 2px solid var(--owner-neon);
+            width: 95%;
+            max-width: 900px;
+            padding: 25px;
+            border-radius: 20px;
             display: grid;
-            grid-template-columns: 350px 1fr 350px;
-            height: 100vh;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
+        .owner-card { background: #111; padding: 15px; border-radius: 12px; border: 1px solid #333; }
+        .owner-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .char-item { cursor: pointer; border: 1px solid #444; padding: 5px; border-radius: 8px; text-align: center; }
+        .char-item img { width: 100%; height: 50px; object-fit: contain; }
+        .owner-input { width: 100%; background: #000; border: 1px solid var(--owner-neon); color: var(--owner-neon); padding: 8px; font-size: 1.2rem; text-align: center; margin-bottom: 8px; }
 
-        .sidebar {
-            background: var(--wood-panel);
-            padding: 20px;
-            border: 6px solid #1a0f08;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            overflow-y: auto;
-            z-index: 10;
-        }
+        /* --- GAME UI --- */
+        #main-game-screen { display: grid; grid-template-columns: 350px 1fr 350px; height: 100vh; }
+        .sidebar { background: var(--wood-medium); border: 6px solid var(--wood-dark); padding: 20px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+        #potato-central { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); }
 
-        /* THE FIX: This creates the "Gray Out" area so memes don't hide your points */
-        #potato-central {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.6); /* Translucent gray-out */
-            backdrop-filter: blur(5px); /* Softens the meme behind it */
-            border-left: 2px solid rgba(255,255,255,0.1);
-            border-right: 2px solid rgba(255,255,255,0.1);
-        }
+        .potato-image { width: 420px; height: 420px; cursor: pointer; transition: transform 0.05s; }
+        .potato-image:active { transform: scale(0.92); }
 
-        .counter { 
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            color: var(--potato-gold); 
-            margin: 0;
-            text-shadow: 3px 3px 10px black;
-        }
+        .counter { font-size: 5rem; color: var(--potato-gold); margin: 0; }
 
-        .potato-image {
-            width: 420px;
-            height: 420px;
-            object-fit: contain;
-            cursor: pointer;
-            filter: drop-shadow(0 0 50px rgba(0,0,0,0.8));
-            transition: transform 0.05s;
-        }
-        .potato-image:active { transform: scale(0.95); }
-
-        /* OWNER MENU COMPONENTS */
-        .owner-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
-        .owner-card { background: #000; border: 2px solid var(--owner-green); padding: 10px; border-radius: 12px; cursor: pointer; text-align: center; width: 120px; }
-        .owner-card img { width: 60px; height: 60px; object-fit: contain; }
-        .owner-card span { display: block; color: var(--owner-green); font-size: 0.9rem; }
-
-        .code-db { background: rgba(0,0,0,0.6); border: 2px dashed var(--owner-green); padding: 15px; width: 500px; margin: 15px 0; border-radius: 10px; }
-        .code-row { display: flex; justify-content: space-between; background: #111; margin: 5px 0; padding: 8px; border-radius: 5px; }
-
-        /* SHOP GRID */
-        .shop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 15px 0; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 20px; }
-        .color-circle { width: 65px; height: 65px; border-radius: 15px; border: 3px solid white; cursor: pointer; transition: 0.2s; }
-        .meme-card { background: #111; border: 2px solid var(--potato-gold); padding: 15px; border-radius: 10px; cursor: pointer; text-align: center; font-weight: bold; }
-
-        .custom-entry { background: #000; border: 3px solid var(--potato-gold); color: var(--creamy-text); padding: 10px; font-size: 1.5rem; text-align: center; width: 300px; }
+        /* --- SHOP GRIDS --- */
+        .ui-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px; background: #111; border-radius: 15px; width: 100%; }
+        .color-box { width: 60px; height: 60px; border-radius: 12px; border: 2px solid white; cursor: pointer; margin: auto; }
+        .meme-box { background: #222; border: 2px solid var(--potato-gold); padding: 15px; border-radius: 10px; cursor: pointer; text-align: center; font-weight: bold; }
     </style>
 </head>
-<body>
+<body onload="initGame()">
 
     <div id="home-menu" class="overlay-menu">
-        <img src="icon.png" style="width:180px;">
-        <h1 class="game-title">SPUD CLICKER</h1>
-        <button class="big-button" onclick="startGame()">PLAY</button>
-        <button class="big-button" onclick="showScreen('shop-menu')">BACKGROUND SHOP</button>
-        <button class="big-button" onclick="showScreen('codes-section')">CODES</button>
-        <button id="owner-btn" class="big-button hidden" style="border-color: var(--owner-green); color: var(--owner-green);" onclick="showScreen('super-spud-panel')">OWNER MENU</button>
+        <div class="top-right-tools">
+            <div class="icon-btn" onclick="toggleFS()">⛶</div>
+            <div class="icon-btn" onclick="alert('Spud Clicker v6.0\New Update\Made By Eddie And Daniel')">ⓘ</div>
+        </div>
+
+        <img src="icon.png" style="width: 160px; margin-bottom: 10px;">
+        <h1 style="font-size: 5rem; color: var(--potato-gold); margin:0;">SPUD CLICKER</h1>
+        
+        <button class="big-button" onclick="startGame()">▶ PLAY</button>
+        <button class="big-button" onclick="saveGame()">💾 SAVE PROGRESS</button>
+        <button class="big-button" onclick="showScreen('shop-menu')">🛒 BACKGROUND SHOP</button>
+        <button class="big-button" onclick="showScreen('locker-menu')">📦 MY LOCKER</button>
+        <button class="big-button" onclick="showScreen('codes-menu')">🔑 REDEEM CODES</button>
+        <button id="owner-btn" class="big-button hidden" style="border-color: var(--owner-neon); color: var(--owner-neon);" onclick="showScreen('owner-panel')">⚡ OWNER PANEL</button>
+    </div>
+
+    <div id="owner-panel" class="overlay-menu hidden" style="border-color: var(--owner-neon);">
+        <h1 style="color: var(--owner-neon); margin: 0 0 15px 0;">GOD-MODE</h1>
+        <div class="owner-window">
+            <div class="owner-card">
+                <p>Currency</p>
+                <input type="number" id="pts-input" class="owner-input" placeholder="Set Spuds...">
+                <button class="big-button" style="width:100%; font-size: 1rem; height: 40px;" onclick="setSpuds()">Set Points</button>
+                <button class="big-button" style="width:100%; font-size: 1rem; height: 40px;" onclick="addPoints(1000000)">+1 Million</button>
+            </div>
+            <div class="owner-card">
+                <p>Character Swap</p>
+                <div class="owner-grid">
+                    <div class="char-item" onclick="forceRank(1, 'Normal', 'spud_main.png')"><img src="spud_main.png"></div>
+                    <div class="char-item" onclick="forceRank(2, 'Swag', 'spud_swag.png')"><img src="spud_swag.png"></div>
+                    <div class="char-item" onclick="forceRank(5, 'King', 'spud_king.png')"><img src="spud_king.png"></div>
+                    <div class="char-item" onclick="forceRank(10, 'Gun', 'spud_gun.png')"><img src="spud_gun.png"></div>
+                </div>
+            </div>
+            <div class="owner-card">
+                <p>Database</p>
+                <button class="big-button" style="width:100%; font-size: 1rem; height: 40px;" onclick="unlockAllMemes()">🔓 Unlock All Memes</button>
+                <button class="big-button" style="width:100%; font-size: 1rem; height: 40px;" onclick="copyAllCodes()">📋 Copy All Codes</button>
+            </div>
+            <div class="owner-card">
+                <p style="color: var(--stop-red)">System</p>
+                <button class="big-button" style="width:100%; font-size: 1rem; height: 40px; background: var(--stop-red); border:none;" onclick="resetData()">DELETE ALL</button>
+            </div>
+        </div>
+        <button class="big-button" style="width: 150px; font-size: 1.2rem; margin-top: 15px;" onclick="showScreen('home-menu')">EXIT</button>
     </div>
 
     <div id="shop-menu" class="overlay-menu hidden">
-        <h1 class="game-title">BG SHOP</h1>
-        <h2 style="color: var(--potato-gold)">Spuds: <span id="shop-balance">0</span></h2>
-        
+        <h1 style="font-size: 3rem; color: var(--potato-gold);">SHOP</h1>
         <h3>Colors (500 Spuds)</h3>
-        <div class="shop-grid">
-            <div onclick="buyBG('color', '#1a1a1a', 500)"><div class="color-circle" style="background: #1a1a1a;"></div></div>
-            <div onclick="buyBG('color', '#e67e22', 500)"><div class="color-circle" style="background: #e67e22;"></div></div>
-            <div onclick="buyBG('color', '#2ecc71', 500)"><div class="color-circle" style="background: #2ecc71;"></div></div>
-            <div onclick="buyBG('color', '#9b59b6', 500)"><div class="color-circle" style="background: #9b59b6;"></div></div>
-            <div onclick="buyBG('color', '#f1c40f', 500)"><div class="color-circle" style="background: #f1c40f;"></div></div>
-            <div onclick="buyBG('color', '#34495e', 500)"><div class="color-circle" style="background: #34495e;"></div></div>
-            <div onclick="buyBG('color', '#c0392b', 500)"><div class="color-circle" style="background: #c0392b;"></div></div>
-            <div onclick="buyBG('color', '#16a085', 500)"><div class="color-circle" style="background: #16a085;"></div></div>
+        <div class="ui-grid" id="color-shop"></div>
+        <h3>Meme Wraps (5,000 Spuds)</h3>
+        <div class="ui-grid" id="meme-shop">
+            <div class="meme-box" onclick="buyBG('image', 'bg_meme1.jpg', 'SHREK', 5000)">SHREK SWAMP</div>
+            <div class="meme-box" onclick="buyBG('image', 'bg_meme2.jpg', 'MASHUP', 5000)">MEME MASHUP</div>
+            <div class="meme-box" onclick="buyBG('image', 'bg_meme3.jpg', 'SPONGE', 5000)">RAINBOW SPONGEBOB</div>
         </div>
-
-        <h3>Meme Backgrounds (5,000 Spuds)</h3>
-        <div class="shop-grid" style="grid-template-columns: 1fr 1fr 1fr;">
-            <div class="meme-card" onclick="buyBG('image', 'meme1', 5000)">SHREK MEME</div>
-            <div class="meme-card" onclick="buyBG('image', 'meme2', 5000)">MEME MASHUP</div>
-            <div class="meme-card" onclick="buyBG('image', 'meme3', 5000)">SPONGEBOB RAINBOW</div>
-        </div>
-
-        <button class="big-button" style="border-color: var(--stop-red)" onclick="showScreen('home-menu')">BACK</button>
+        <button class="big-button" onclick="showScreen('home-menu')">BACK</button>
     </div>
 
-    <div id="codes-section" class="overlay-menu hidden">
-        <h1 class="game-title">Codes</h1>
-        <input type="text" id="code-input" class="custom-entry" placeholder="Type here...">
-        <button class="big-button" onclick="processCode()">SUBMIT</button>
-        <button class="big-button" style="border-color: var(--stop-red)" onclick="showScreen('home-menu')">BACK</button>
+    <div id="locker-menu" class="overlay-menu hidden">
+        <h1 style="font-size: 3rem; color: var(--potato-gold);">MY LOCKER</h1>
+        <div id="locker-grid" class="ui-grid"></div>
+        <button class="big-button" onclick="showScreen('home-menu')">BACK</button>
     </div>
 
-    <div id="super-spud-panel" class="overlay-menu hidden">
-        <h1 style="color: var(--owner-green);">OWNER CONTROL</h1>
-        
-        <div class="owner-grid">
-            <div class="owner-card" onclick="cheatChar(1, 'Normal Spud', 'spud_main.png')"><img src="spud_main.png"><span>Normal</span></div>
-            <div class="owner-card" onclick="cheatChar(2, 'Swag Spud', 'spud_swag.png')"><img src="spud_swag.png"><span>Swag</span></div>
-            <div class="owner-card" onclick="cheatChar(3, 'King Spud', 'spud_king.png')"><img src="spud_king.png"><span>King</span></div>
-            <div class="owner-card" onclick="cheatChar(4, 'Gun Spud', 'spud_gun.png')"><img src="spud_gun.png"><span>Gun</span></div>
-        </div>
-
-        <input type="number" id="cheat-number" class="custom-entry" style="border-color: var(--owner-green);" placeholder="Set Spuds...">
-        
-        <div class="code-db">
-            <h4 style="margin:0; color: var(--owner-green); text-align: center;">Codes</h4>
-            <div class="code-row"><span>SPUD600</span> <button onclick="copyText('SPUD600')">COPY</button></div>
-            <div class="code-row"><span>GUNS</span> <button onclick="copyText('GUNS')">COPY</button></div>
-            <div class="code-row"><span>MEGASAUR</span> <button onclick="copyText('MEGASAUR')">COPY</button></div>
-        </div>
-
-        <button class="big-button" onclick="applySuperSpud()">APPLY & CLOSE</button>
+    <div id="codes-menu" class="overlay-menu hidden">
+        <h1 style="font-size: 3rem;">CODES</h1>
+        <input type="text" id="code-entry" style="font-size: 2rem; width: 400px; text-align: center; background: #111; color: gold; border: 2px solid gold;">
+        <button class="big-button" onclick="redeem()">REDEEM</button>
+        <button class="big-button" onclick="showScreen('home-menu')">BACK</button>
     </div>
 
     <div id="main-game-screen">
         <div class="sidebar">
-            <h1 style="text-align: center; margin:0;">Upgrades</h1>
-            <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('hoe')">Hand Hoe (<span id="cost-hoe">15</span>)</button>
-            <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('field')">Potato Field (<span id="cost-field">250</span>)</button>
-            <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('factory')">Spud Factory (<span id="cost-factory">2000</span>)</button>
-            <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('city')">Potato City (<span id="cost-city">15000</span>)</button>
-            <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('planet')">Potato Planet (<span id="cost-planet">100000</span>)</button>
-            <button id="evolve-button" class="big-button" style="width:100%; font-size: 1.5rem; background: #4b3621;" onclick="evolveMe()">Evolve (<span id="evolve-cost-text">5000</span>)</button>
+            <h2>UPGRADES</h2>
+            <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('hoe', 1)">Hand Hoe (<span id="c-hoe">15</span>)</button>
+            <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('field', 12)">Spud Field (<span id="c-field">250</span>)</button>
+            <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('factory', 60)">Factory (<span id="c-factory">2k</span>)</button>
+            <div style="flex-grow:1"></div>
+            <button id="evolve-btn" class="big-button" style="width:100%; background: #4b3621;" onclick="evolve()">EVOLVE (5k)</button>
         </div>
-
         <div id="potato-central">
-            <h1 class="counter" id="main-count">0</h1>
-            <p style="font-size: 1.5rem; margin:0;">SPS: <span id="sps-text">0</span></p>
-            <img id="spud-visual" src="spud_main.png" class="potato-image" onclick="clickAction()">
-            <h2 id="rank-text" style="font-size: 2.2rem; margin:10px;">Rank: Normal Spud</h2>
+            <h1 class="counter" id="spud-count">0</h1>
+            <p>SPS: <span id="sps-count">0</span></p>
+            <img id="main-spud" src="spud_main.png" class="potato-image" onclick="clickSpud()">
+            <h2 id="rank-display">Rank: Normal Spud</h2>
         </div>
-
         <div class="sidebar">
-            <h1 style="text-align: center; margin:0;">Settings</h1>
-            <button class="big-button" style="width:100%; font-size: 1.3rem;" onclick="toggleMusic()">Music: <span id="music-status">Off</span></button>
-            <button class="big-button" style="width:100%; font-size: 1.3rem;" onclick="toggleSound()">SFX: <span id="sfx-status">On</span></button>
-            <button class="big-button" style="width:100%; font-size: 1.3rem;" onclick="showScreen('shop-menu')">BG Shop</button>
-            <div style="flex-grow: 1;"></div>
-            <button class="big-button" style="width:100%; font-size: 1.3rem;" onclick="showScreen('home-menu')">Home</button>
+            <button class="big-button" style="width:100%;" onclick="showScreen('home-menu')">Main Menu</button>
+            <button class="big-button" style="width:100%;" onclick="saveGame()">Save Game</button>
+            <button class="big-button" style="width:100%;" onclick="showScreen('shop-menu')">Shop</button>
+            <button class="big-button" style="width:100%;" onclick="showScreen('locker-menu')">Locker</button>
         </div>
     </div>
 
-    <audio id="audio-bg" src="spud_bg_loop.mp3" loop></audio>
-    <audio id="audio-click" src="click_sound.mp3"></audio>
-
     <script>
-        const memeFiles = {
-            meme1: "bg_meme1.jpg", 
-            meme2: "bg_meme2.jpg", 
-            meme3: "bg_meme3.jpg"
+        let g = {
+            spuds: 0, sps: 0, clickPwr: 1, rank: 1,
+            rName: "Normal Spud", char: "spud_main.png",
+            bgs: [{t: 'color', v: '#000000', n: 'Default'}],
+            costs: { hoe: 15, field: 250, factory: 2000 }
         };
 
-        let potatoCount = 0;
-        let perSecondGain = 0;
-        let levelRank = 1;
-        let soundOn = true;
-        let musicOn = false;
+        const colors = ["#e67e22", "#2ecc71", "#9b59b6", "#c0392b", "#3498db", "#f1c40f", "#000000"];
 
-        const upgrades = {
-            hoe: { cost: 15, sps: 1 },
-            field: { cost: 250, sps: 12 },
-            factory: { cost: 2000, sps: 60 },
-            city: { cost: 15000, sps: 350 },
-            planet: { cost: 100000, sps: 2500 }
-        };
+        function initGame() {
+            const saved = localStorage.getItem('spudMemeEdition');
+            if(saved) g = JSON.parse(saved);
+            
+            const colorShop = document.getElementById('color-shop');
+            colors.forEach(c => {
+                const d = document.createElement('div');
+                d.className = "color-box"; d.style.background = c;
+                d.onclick = () => buyBG('color', c, c, 500);
+                colorShop.appendChild(d);
+            });
 
-        function showScreen(id) {
-            document.querySelectorAll('.overlay-menu').forEach(menu => menu.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-            if(id === 'shop-menu') document.getElementById('shop-balance').innerText = Math.floor(potatoCount).toLocaleString();
+            updateUI();
+            setInterval(() => { g.spuds += (g.sps/10); updateUI(); }, 100);
         }
 
+        function updateUI() {
+            document.getElementById('spud-count').innerText = Math.floor(g.spuds).toLocaleString();
+            document.getElementById('sps-count').innerText = g.sps.toLocaleString();
+            document.getElementById('c-hoe').innerText = g.costs.hoe.toLocaleString();
+            document.getElementById('c-field').innerText = g.costs.field.toLocaleString();
+            document.getElementById('c-factory').innerText = g.costs.factory.toLocaleString();
+            document.getElementById('main-spud').src = g.char;
+            document.getElementById('rank-display').innerText = "Rank: " + g.rName;
+            
+            const evoBtn = document.getElementById('evolve-btn');
+            if(g.rank === 1) evoBtn.innerText = "EVOLVE (5,000)";
+            else if(g.rank === 2) evoBtn.innerText = "EVOLVE (50,000)";
+            else evoBtn.innerText = "MAX RANK";
+        }
+
+        function clickSpud() { g.spuds += g.clickPwr; updateUI(); }
+
+        function buyItem(id, pwr) {
+            if(g.spuds >= g.costs[id]) {
+                g.spuds -= g.costs[id];
+                g.sps += pwr;
+                g.costs[id] = Math.floor(g.costs[id] * 1.5);
+                updateUI();
+            }
+        }
+
+        function evolve() {
+            if(g.rank === 1 && g.spuds >= 5000) {
+                g.spuds -= 5000; g.rank = 2; g.clickPwr = 2;
+                g.rName = "Swag Spud"; g.char = "spud_swag.png";
+            } else if(g.rank === 2 && g.spuds >= 50000) {
+                g.spuds -= 50000; g.rank = 3; g.clickPwr = 5;
+                g.rName = "King Spud"; g.char = "spud_king.png";
+            }
+            updateUI();
+        }
+
+        function buyBG(t, v, n, p) {
+            if(g.spuds >= p && !g.bgs.some(b => b.v === v)) {
+                g.spuds -= p;
+                g.bgs.push({t, v, n});
+                applyBG(t, v);
+                alert("Unlocked: " + n);
+            } else if(g.bgs.some(b => b.v === v)) {
+                applyBG(t,v);
+            }
+        }
+
+        function applyBG(t, v) {
+            if(t === 'color') { document.body.style.backgroundImage = "none"; document.body.style.backgroundColor = v; }
+            else { document.body.style.backgroundImage = `url('${v}')`; }
+        }
+
+        function renderLocker() {
+            const container = document.getElementById('locker-grid');
+            container.innerHTML = "";
+            g.bgs.forEach(bg => {
+                const div = document.createElement('div');
+                div.className = (bg.t === 'color') ? "color-box" : "meme-box";
+                if(bg.t === 'color') div.style.background = bg.v;
+                else div.innerText = bg.n;
+                div.onclick = () => applyBG(bg.t, bg.v);
+                container.appendChild(div);
+            });
+        }
+
+        function redeem() {
+            const v = document.getElementById('code-entry').value;
+            if(v === "SuperSpud") document.getElementById('owner-btn').classList.remove('hidden');
+            if(v === "MEGASAUR") g.spuds += 50000;
+            document.getElementById('code-entry').value = "";
+            updateUI();
+        }
+
+        // --- GOD MODE ---
+        function setSpuds() { g.spuds = parseFloat(document.getElementById('pts-input').value) || 0; updateUI(); }
+        function addPoints(n) { g.spuds += n; updateUI(); }
+        function forceRank(pwr, name, img) { g.clickPwr = pwr; g.rName = name + " Spud"; g.char = img; updateUI(); }
+        function copyAllCodes() { navigator.clipboard.writeText("SuperSpud, MEGASAUR, GUNS, SPUD600"); alert("Codes Copied!"); }
+        function unlockAllMemes() {
+            g.bgs.push({t:'image', v:'bg_meme1.jpg', n:'SHREK'}, {t:'image', v:'bg_meme2.jpg', n:'MASHUP'}, {t:'image', v:'bg_meme3.jpg', n:'SPONGE'});
+            alert("All Memes Unlocked!");
+        }
+        function resetData() { localStorage.clear(); location.reload(); }
+        function saveGame() { localStorage.setItem('spudMemeEdition', JSON.stringify(g)); alert("Saved!"); }
         function startGame() { document.getElementById('home-menu').classList.add('hidden'); }
-
-        function buyBG(type, value, price) {
-            if (potatoCount >= price) {
-                potatoCount -= price;
-                if (type === 'color') {
-                    document.body.style.backgroundImage = "none";
-                    document.body.style.backgroundColor = value;
-                } else {
-                    document.body.style.backgroundImage = `url('${memeFiles[value]}')`;
-                }
-                refreshDisplay();
-                document.getElementById('shop-balance').innerText = Math.floor(potatoCount).toLocaleString();
-            } else { alert("You need more spuds!"); }
+        function showScreen(id) {
+            document.querySelectorAll('.overlay-menu').forEach(m => m.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            if(id === 'locker-menu') renderLocker();
         }
-
-        function processCode() {
-            const entry = document.getElementById('code-input').value;
-            if (entry === "SuperSpud") document.getElementById('owner-btn').classList.remove('hidden');
-            if (entry === "MEGASAUR") potatoCount += 50000;
-            if (entry === "GUNS") potatoCount += 10000;
-            if (entry === "SPUD600") potatoCount += 600;
-            refreshDisplay();
-            document.getElementById('code-input').value = "";
+        function toggleFS() {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
         }
-
-        function cheatChar(rank, name, file) {
-            levelRank = rank;
-            document.getElementById('spud-visual').src = file;
-            document.getElementById('rank-text').innerText = "Rank: " + name;
-            if (rank === 4) document.getElementById('evolve-button').classList.add('hidden');
-            else document.getElementById('evolve-button').classList.remove('hidden');
-        }
-
-        function copyText(txt) { navigator.clipboard.writeText(txt); alert("Copied!"); }
-
-        function applySuperSpud() {
-            const val = parseFloat(document.getElementById('cheat-number').value);
-            if (!isNaN(val)) potatoCount = val;
-            refreshDisplay();
-            showScreen('home-menu');
-        }
-
-        function clickAction() {
-            potatoCount += levelRank;
-            if (soundOn) { document.getElementById('audio-click').currentTime = 0; document.getElementById('audio-click').play().catch(()=>{}); }
-            refreshDisplay();
-        }
-
-        function buyItem(id) {
-            const item = upgrades[id];
-            if (potatoCount >= item.cost) {
-                potatoCount -= item.cost;
-                perSecondGain += item.sps;
-                item.cost = Math.floor(item.cost * 1.4);
-                refreshDisplay();
-            }
-        }
-
-        function evolveMe() {
-            const costs = [0, 5000, 50000, 500000];
-            if (potatoCount >= costs[levelRank] && levelRank < 4) {
-                potatoCount -= costs[levelRank];
-                levelRank++;
-                if (levelRank === 2) cheatChar(2, 'Swag Spud', 'spud_swag.png');
-                if (levelRank === 3) cheatChar(3, 'King Spud', 'spud_king.png');
-                if (levelRank === 4) cheatChar(4, 'Gun Spud', 'spud_gun.png');
-                refreshDisplay();
-            }
-        }
-
-        function toggleMusic() {
-            musicOn = !musicOn;
-            musicOn ? document.getElementById('audio-bg').play() : document.getElementById('audio-bg').pause();
-            document.getElementById('music-status').innerText = musicOn ? "On" : "Off";
-        }
-
-        function toggleSound() {
-            soundOn = !soundOn;
-            document.getElementById('sfx-status').innerText = soundOn ? "On" : "Off";
-        }
-
-        function refreshDisplay() {
-            document.getElementById('main-count').innerText = Math.floor(potatoCount).toLocaleString();
-            document.getElementById('sps-text').innerText = perSecondGain.toLocaleString();
-            document.getElementById('cost-hoe').innerText = upgrades.hoe.cost.toLocaleString();
-            document.getElementById('cost-field').innerText = upgrades.field.cost.toLocaleString();
-            document.getElementById('cost-factory').innerText = upgrades.factory.cost.toLocaleString();
-            document.getElementById('cost-city').innerText = upgrades.city.cost.toLocaleString();
-            document.getElementById('cost-planet').innerText = upgrades.planet.cost.toLocaleString();
-        }
-
-        setInterval(() => { potatoCount += (perSecondGain / 10); refreshDisplay(); }, 100);
     </script>
 </body>
 </html>
