@@ -99,7 +99,6 @@
 
     <div id="home-menu" class="overlay-menu">
         <div class="top-right-tools">
-            <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.5" oninput="updateVol()">
             <div class="big-button" style="width: auto; padding: 5px 15px;" onclick="toggleFS()">⛶</div>
         </div>
         <img src="icon.png" style="width: 150px;">
@@ -181,7 +180,7 @@
 
     <script>
         let g = {
-            spuds: 0, sps: 0, clickPwr: 1, rank: 1, volume: 0.5,
+            spuds: 0, sps: 0, clickPwr: 1, rank: 1,
             rName: "Normal Spud", char: "spud_main.png",
             bgs: [{t: 'color', v: '#000000', n: 'Default'}],
             costs: { hoe: 15, field: 250, factory: 2000 }
@@ -193,6 +192,9 @@
             const saved = localStorage.getItem('spudDefinitiveSave');
             if(saved) g = JSON.parse(saved);
             
+            // Set sound to a default 0.5 volume since slider is gone
+            document.getElementById('click-sound').volume = 0.5;
+
             const shop = document.getElementById('color-shop');
             colorPalette.forEach(c => {
                 let d = document.createElement('div');
@@ -224,7 +226,7 @@
                 g.rank++;
                 if (g.rank === 2) { g.rName = "Swag Spud"; g.char = "spud_swag.png"; g.clickPwr += 2; }
                 else if (g.rank === 3) { g.rName = "King Spud"; g.char = "spud_king.png"; g.clickPwr += 5; }
-                else { g.rName = "God Spud"; g.char = "spud_gun.png"; g.clickPwr += 10; }
+                else { g.rName = "Gunsford"; g.char = "spud_gunsford.png"; g.clickPwr += 10; }
                 triggerFx('gold');
                 alert("EVOLVED TO: " + g.rName);
                 updateUI();
@@ -307,7 +309,6 @@
             document.getElementById(id).classList.remove('hidden');
             if(id === 'locker-menu') renderLocker();
         }
-        function updateVol() { document.getElementById('click-sound').volume = document.getElementById('vol-slider').value; }
         function toggleFS() { if(!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
     </script>
 </body>
