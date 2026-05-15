@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spud Clicker</title>
+    <title>Spud Clicker: Definitive Edition</title>
     
     <link rel="shortcut icon" type="image/png" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
             --potato-gold: #d4af37;
             --creamy-text: #ffcc66;
             --stop-red: #cc0000;
-            --owner-neon: #00ff41;
+            --owner-magenta: #ff00ff;
         }
 
         * { box-sizing: border-box; font-family: 'Patrick Hand', cursive; user-select: none; }
@@ -33,42 +33,26 @@
             transition: 0.5s ease;
         }
 
+        /* --- FLASH & ANIMATIONS --- */
+        #fx-flash { position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0; }
+        @keyframes flash-anim { 0% { opacity: 0.6; } 100% { opacity: 0; } }
+
         /* --- MENUS --- */
         .overlay-menu {
-            position: fixed;
-            inset: 0;
-            background: var(--pure-black);
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.98);
             z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             border: 15px solid var(--wood-medium);
             padding: 40px;
+            overflow-y: auto;
         }
-
         .hidden { display: none !important; }
 
         .top-right-tools {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            position: absolute; top: 25px; right: 25px;
+            display: flex; align-items: center; gap: 12px;
         }
-
-        .icon-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--potato-gold);
-            color: var(--potato-gold);
-            padding: 8px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: 0.2s;
-        }
-        .icon-btn:hover { background: var(--potato-gold); color: #000; transform: scale(1.1); }
 
         .big-button {
             background: var(--wood-medium);
@@ -81,110 +65,59 @@
             width: 380px;
             border-radius: 18px;
             transition: 0.2s;
+            text-align: center;
         }
-        .big-button:hover { background: var(--potato-gold); color: #000; }
+        .big-button:hover { background: var(--potato-gold); color: #000; transform: scale(1.02); }
+
+        /* --- GRID SYSTEMS --- */
+        .ui-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px; background: #111; border-radius: 15px; width: 100%; max-width: 800px; }
+        .color-box { width: 70px; height: 70px; border-radius: 12px; border: 2px solid white; cursor: pointer; margin: auto; }
+        .meme-box { background: #222; border: 2px solid var(--potato-gold); padding: 15px; border-radius: 10px; cursor: pointer; text-align: center; font-weight: bold; min-height: 60px; display: flex; align-items: center; justify-content: center; }
 
         /* --- OWNER PANEL --- */
         .owner-window {
-            background: #080808;
-            border: 2px solid var(--owner-neon);
-            width: 95%;
-            max-width: 900px;
-            padding: 25px;
-            border-radius: 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            background: #080808; border: 3px solid var(--owner-magenta);
+            width: 95%; max-width: 900px; padding: 20px; border-radius: 20px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
         }
         .owner-card { background: #111; padding: 15px; border-radius: 12px; border: 1px solid #333; }
-        .owner-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .char-item { cursor: pointer; border: 1px solid #444; padding: 5px; border-radius: 8px; text-align: center; }
-        .char-item img { width: 100%; height: 50px; object-fit: contain; }
-        .owner-input { width: 100%; background: #000; border: 1px solid var(--owner-neon); color: var(--owner-neon); padding: 8px; font-size: 1.2rem; text-align: center; margin-bottom: 8px; }
+        .code-list-box { grid-column: span 2; background: #000; border: 1px solid #0f0; color: #0f0; font-family: monospace; padding: 10px; font-size: 0.9rem; max-height: 150px; overflow-y: auto; }
 
-        /* --- GAME UI --- */
+        /* --- GAMEPLAY --- */
         #main-game-screen { display: grid; grid-template-columns: 350px 1fr 350px; height: 100vh; }
         .sidebar { background: var(--wood-medium); border: 6px solid var(--wood-dark); padding: 20px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
-        #potato-central { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); }
-
-        .potato-image { 
-            width: 420px; 
-            height: 420px; 
-            object-fit: contain; 
-            cursor: pointer; 
-            transition: transform 0.05s; 
-        }
+        #potato-central { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
+        .potato-image { width: 420px; height: 420px; object-fit: contain; cursor: pointer; transition: transform 0.05s; }
         .potato-image:active { transform: scale(0.92); }
-
-        .counter { font-size: 5rem; color: var(--potato-gold); margin: 0; }
-
-        .ui-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px; background: #111; border-radius: 15px; width: 100%; }
-        .color-box { width: 60px; height: 60px; border-radius: 12px; border: 2px solid white; cursor: pointer; margin: auto; }
-        .meme-box { background: #222; border: 2px solid var(--potato-gold); padding: 15px; border-radius: 10px; cursor: pointer; text-align: center; font-weight: bold; }
-        
-        #vol-slider { cursor: pointer; accent-color: var(--potato-gold); width: 80px; }
+        .counter { font-size: 5rem; color: var(--potato-gold); margin: 0; text-shadow: 2px 2px #000; }
     </style>
 </head>
 <body onload="initGame()">
 
+    <div id="fx-flash"></div>
     <audio id="click-sound" src="click.mp3" preload="auto"></audio>
 
     <div id="home-menu" class="overlay-menu">
         <div class="top-right-tools">
-            <span style="font-size: 1rem;">🔊</span>
             <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.5" oninput="updateVol()">
-            <div class="icon-btn" onclick="toggleFS()">⛶</div>
-            <div class="icon-btn" onclick="alert('Spud Clicker v6.0\nMade By Eddie And Daniel\n!New Update!')">ⓘ</div>
+            <div class="big-button" style="width: auto; padding: 5px 15px;" onclick="toggleFS()">⛶</div>
         </div>
-
-        <img src="icon.png" style="width: 160px; margin-bottom: 10px; object-fit: contain;">
-        <h1 style="font-size: 5rem; color: var(--potato-gold); margin:0;">SPUD CLICKER</h1>
-        
-        <button class="big-button" onclick="startGame()">▶ PLAY</button>
-        <button class="big-button" onclick="saveGame()">💾 SAVE PROGRESS</button>
+        <img src="icon.png" style="width: 150px;">
+        <h1 style="font-size: 5rem; color: var(--potato-gold);">SPUD CLICKER</h1>
+        <button class="big-button" onclick="startGame()">▶ PLAY GAME</button>
+        <button class="big-button" onclick="saveGame()">💾 SAVE DATA</button>
         <button class="big-button" onclick="showScreen('shop-menu')">🛒 BACKGROUND SHOP</button>
         <button class="big-button" onclick="showScreen('locker-menu')">📦 MY LOCKER</button>
         <button class="big-button" onclick="showScreen('codes-menu')">🔑 REDEEM CODES</button>
-        <button id="owner-btn" class="big-button hidden" style="border-color: var(--owner-neon); color: var(--owner-neon);" onclick="showScreen('owner-panel')">⚡ OWNER PANEL</button>
-    </div>
-
-    <div id="owner-panel" class="overlay-menu hidden" style="border-color: var(--owner-neon);">
-        <h1 style="color: var(--owner-neon); margin: 0 0 15px 0;">GOD-MODE</h1>
-        <div class="owner-window">
-            <div class="owner-card">
-                <p>Currency</p>
-                <input type="number" id="pts-input" class="owner-input" placeholder="Set Spuds...">
-                <button class="big-button" style="width:100%; font-size: 1rem; height: 40px;" onclick="setSpuds()">Set Points</button>
-                <button class="big-button" style="width:100%; font-size: 1rem; height: 40px;" onclick="addPoints(1000000)">+1 Million</button>
-            </div>
-            <div class="owner-card">
-                <p>Character Swap</p>
-                <div class="owner-grid">
-                    <div class="char-item" onclick="forceRank(1, 'Normal', 'spud_main.png')"><img src="spud_main.png"></div>
-                    <div class="char-item" onclick="forceRank(2, 'Swag', 'spud_swag.png')"><img src="spud_swag.png"></div>
-                    <div class="char-item" onclick="forceRank(5, 'King', 'spud_king.png')"><img src="spud_king.png"></div>
-                    <div class="char-item" onclick="forceRank(10, 'Gun', 'spud_gun.png')"><img src="spud_gun.png"></div>
-                </div>
-            </div>
-            <div class="owner-card">
-                <p>Database</p>
-                <button class="big-button" style="width:100%; font-size: 1rem; height: 40px;" onclick="unlockAllMemes()">🔓 Unlock All Memes</button>
-                <button class="big-button" style="width:100%; font-size: 1rem; height: 40px;" onclick="copyAllCodes()">📋 Copy All Codes</button>
-            </div>
-            <div class="owner-card">
-                <p style="color: var(--stop-red)">System</p>
-                <button class="big-button" style="width:100%; font-size: 1rem; height: 40px; background: var(--stop-red); border:none;" onclick="resetData()">DELETE ALL</button>
-            </div>
-        </div>
-        <button class="big-button" style="width: 150px; font-size: 1.2rem; margin-top: 15px;" onclick="showScreen('home-menu')">EXIT</button>
+        <button id="owner-btn" class="big-button hidden" style="border-color: var(--owner-magenta); color: var(--owner-magenta);" onclick="showScreen('owner-panel')">⚡ OWNER PANEL</button>
     </div>
 
     <div id="shop-menu" class="overlay-menu hidden">
-        <h1 style="font-size: 3rem; color: var(--potato-gold);">SHOP</h1>
+        <h1 style="color: var(--potato-gold);">BACKGROUND SHOP</h1>
         <h3>Colors (500 Spuds)</h3>
         <div class="ui-grid" id="color-shop"></div>
         <h3>Meme Wraps (5,000 Spuds)</h3>
-        <div class="ui-grid" id="meme-shop">
+        <div class="ui-grid">
             <div class="meme-box" onclick="buyBG('image', 'bg_meme1.jpg', 'SHREK', 5000)">SHREK SWAMP</div>
             <div class="meme-box" onclick="buyBG('image', 'bg_meme2.jpg', 'MASHUP', 5000)">MEME MASHUP</div>
             <div class="meme-box" onclick="buyBG('image', 'bg_meme3.jpg', 'SPONGE', 5000)">RAINBOW SPONGEBOB</div>
@@ -193,16 +126,34 @@
     </div>
 
     <div id="locker-menu" class="overlay-menu hidden">
-        <h1 style="font-size: 3rem; color: var(--potato-gold);">MY LOCKER</h1>
+        <h1 style="color: var(--potato-gold);">MY LOCKER</h1>
         <div id="locker-grid" class="ui-grid"></div>
         <button class="big-button" onclick="showScreen('home-menu')">BACK</button>
     </div>
 
     <div id="codes-menu" class="overlay-menu hidden">
-        <h1 style="font-size: 3rem;">CODES</h1>
-        <input type="text" id="code-entry" style="font-size: 2rem; width: 400px; text-align: center; background: #111; color: gold; border: 2px solid gold;">
+        <h1>REDEEM CODES</h1>
+        <input type="text" id="code-entry" style="font-size: 2rem; text-align: center; width: 400px; background: #000; color: gold; border: 2px solid gold;">
         <button class="big-button" onclick="redeem()">REDEEM</button>
         <button class="big-button" onclick="showScreen('home-menu')">BACK</button>
+    </div>
+
+    <div id="owner-panel" class="overlay-menu hidden" style="border-color: var(--owner-magenta);">
+        <h1 style="color: var(--owner-magenta);">OWNER ADMIN</h1>
+        <div class="owner-window">
+            <div class="owner-card">
+                <p>Add Currency</p>
+                <button class="big-button" style="width:100%; font-size: 1rem;" onclick="g.spuds += 1000000; updateUI();">+1 Million</button>
+            </div>
+            <div class="owner-card">
+                <p>Unlock Content</p>
+                <button class="big-button" style="width:100%; font-size: 1rem;" onclick="unlockAll()">Unlock All BGs</button>
+            </div>
+            <div class="code-list-box" id="master-code-display">
+                LOADED CODES: SuperSpud, GHOST, TURBO, RICHES, GRAVITY, RAINBOW, SMALL, BIGGIE, INFLATION, FREEZE, ECHO
+            </div>
+        </div>
+        <button class="big-button" onclick="showScreen('home-menu')">EXIT</button>
     </div>
 
     <div id="main-game-screen">
@@ -210,7 +161,7 @@
             <h2>UPGRADES</h2>
             <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('hoe', 1)">Hand Hoe (<span id="c-hoe">15</span>)</button>
             <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('field', 12)">Spud Field (<span id="c-field">250</span>)</button>
-            <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('factory', 60)">Factory (<span id="c-factory">2k</span>)</button>
+            <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('factory', 80)">Factory (<span id="c-factory">2k</span>)</button>
             <div style="flex-grow:1"></div>
             <button id="evolve-btn" class="big-button" style="width:100%; background: #4b3621;" onclick="evolve()">EVOLVE (5k)</button>
         </div>
@@ -221,10 +172,10 @@
             <h2 id="rank-display">Rank: Normal Spud</h2>
         </div>
         <div class="sidebar">
-            <button class="big-button" style="width:100%;" onclick="showScreen('home-menu')">Main Menu</button>
-            <button class="big-button" style="width:100%;" onclick="saveGame()">Save Game</button>
-            <button class="big-button" style="width:100%;" onclick="showScreen('shop-menu')">Shop</button>
-            <button class="big-button" style="width:100%;" onclick="showScreen('locker-menu')">Locker</button>
+            <button class="big-button" style="width:100%;" onclick="showScreen('home-menu')">MENU</button>
+            <button class="big-button" style="width:100%;" onclick="saveGame()">SAVE</button>
+            <button class="big-button" style="width:100%;" onclick="showScreen('shop-menu')">SHOP</button>
+            <button class="big-button" style="width:100%;" onclick="showScreen('locker-menu')">LOCKER</button>
         </div>
     </div>
 
@@ -236,24 +187,84 @@
             costs: { hoe: 15, field: 250, factory: 2000 }
         };
 
-        const colors = ["#e67e22", "#2ecc71", "#9b59b6", "#c0392b", "#3498db", "#f1c40f", "#000000"];
+        const colorPalette = ["#e67e22", "#2ecc71", "#9b59b6", "#c0392b", "#3498db", "#000000"];
 
         function initGame() {
-            const saved = localStorage.getItem('spudMemeEdition');
+            const saved = localStorage.getItem('spudDefinitiveSave');
             if(saved) g = JSON.parse(saved);
             
-            const colorShop = document.getElementById('color-shop');
-            colors.forEach(c => {
-                const d = document.createElement('div');
+            const shop = document.getElementById('color-shop');
+            colorPalette.forEach(c => {
+                let d = document.createElement('div');
                 d.className = "color-box"; d.style.background = c;
                 d.onclick = () => buyBG('color', c, c, 500);
-                colorShop.appendChild(d);
+                shop.appendChild(d);
             });
 
-            document.getElementById('vol-slider').value = g.volume || 0.5;
-            updateVol();
             updateUI();
             setInterval(() => { g.spuds += (g.sps/10); updateUI(); }, 100);
+        }
+
+        function triggerFx(c) {
+            const f = document.getElementById('fx-flash');
+            f.style.background = c; f.style.animation = 'none'; f.offsetHeight;
+            f.style.animation = 'flash-anim 0.5s ease-out forwards';
+        }
+
+        function clickSpud() {
+            g.spuds += g.clickPwr;
+            const s = document.getElementById('click-sound');
+            if(s) { s.currentTime = 0; s.play(); }
+            updateUI();
+        }
+
+        function redeem() {
+            const v = document.getElementById('code-entry').value;
+            const inp = document.getElementById('code-entry');
+            let f = false;
+
+            if(v === "SuperSpud") { document.getElementById('owner-btn').classList.remove('hidden'); triggerFx('#ff00ff'); f = true; }
+            if(v === "GHOST") { g.clickPwr += 50; triggerFx('white'); f = true; }
+            if(v === "TURBO") { g.sps *= 2; triggerFx('cyan'); f = true; }
+            if(v === "RICHES") { g.spuds += 250000; triggerFx('gold'); f = true; }
+            if(v === "GRAVITY") { document.getElementById('main-spud').style.transform = "translateY(-100px)"; f = true; }
+            if(v === "RAINBOW") { setInterval(() => triggerFx(`hsl(${Math.random()*360},70%,50%)`), 1000); f = true; }
+            if(v === "SMALL") { document.getElementById('main-spud').style.width = "80px"; f = true; }
+            if(v === "BIGGIE") { document.getElementById('main-spud').style.width = "700px"; f = true; }
+            if(v === "INFLATION") { g.costs = {hoe:1, field:1, factory:1}; f = true; }
+            if(v === "FREEZE") { g.sps = 0; triggerFx('blue'); f = true; }
+            if(v === "ECHO") { setInterval(() => clickSpud(), 1000); f = true; }
+
+            if(f) { inp.value = ""; updateUI(); alert("CODE ACCEPTED"); }
+            else { alert("INVALID CODE"); }
+        }
+
+        function buyBG(t, v, n, p) {
+            if(g.spuds >= p && !g.bgs.some(b => b.v === v)) {
+                g.spuds -= p; g.bgs.push({t, v, n});
+                applyBG(t, v); updateUI();
+            } else if(g.bgs.some(b => b.v === v)) { applyBG(t, v); }
+        }
+
+        function applyBG(t, v) {
+            if(t === 'color') { document.body.style.backgroundImage = "none"; document.body.style.backgroundColor = v; }
+            else { document.body.style.backgroundImage = `url('${v}')`; }
+        }
+
+        function renderLocker() {
+            const container = document.getElementById('locker-grid');
+            container.innerHTML = "";
+            g.bgs.forEach(bg => {
+                let div = document.createElement('div');
+                div.className = (bg.t === 'color') ? "color-box" : "meme-box";
+                if(bg.t === 'color') div.style.background = bg.v; else div.innerText = bg.n;
+                div.onclick = () => applyBG(bg.t, bg.v);
+                container.appendChild(div);
+            });
+        }
+
+        function buyItem(id, p) {
+            if(g.spuds >= g.costs[id]) { g.spuds -= g.costs[id]; g.sps += p; g.costs[id] = Math.floor(g.costs[id]*1.5); updateUI(); }
         }
 
         function updateUI() {
@@ -263,110 +274,18 @@
             document.getElementById('c-field').innerText = g.costs.field.toLocaleString();
             document.getElementById('c-factory').innerText = g.costs.factory.toLocaleString();
             document.getElementById('main-spud').src = g.char;
-            document.getElementById('rank-display').innerText = "Rank: " + g.rName;
-            
-            const evoBtn = document.getElementById('evolve-btn');
-            if(g.rank === 1) evoBtn.innerText = "EVOLVE (5,000)";
-            else if(g.rank === 2) evoBtn.innerText = "EVOLVE (50,000)";
-            else evoBtn.innerText = "MAX RANK";
         }
 
-        function updateVol() {
-            g.volume = document.getElementById('vol-slider').value;
-            document.getElementById('click-sound').volume = g.volume;
-        }
-
-        function clickSpud() { 
-            g.spuds += g.clickPwr; 
-            const sfx = document.getElementById('click-sound');
-            sfx.currentTime = 0; // Restart sound if already playing
-            sfx.play();
-            updateUI(); 
-        }
-
-        function buyItem(id, pwr) {
-            if(g.spuds >= g.costs[id]) {
-                g.spuds -= g.costs[id];
-                g.sps += pwr;
-                g.costs[id] = Math.floor(g.costs[id] * 1.5);
-                updateUI();
-            }
-        }
-
-        function evolve() {
-            if(g.rank === 1 && g.spuds >= 5000) {
-                g.spuds -= 5000; g.rank = 2; g.clickPwr = 2;
-                g.rName = "Swag Spud"; g.char = "spud_swag.png";
-            } else if(g.rank === 2 && g.spuds >= 50000) {
-                g.spuds -= 50000; g.rank = 3; g.clickPwr = 5;
-                g.rName = "King Spud"; g.char = "spud_king.png";
-            }
-            updateUI();
-        }
-
-        function buyBG(t, v, n, p) {
-            if(g.spuds >= p && !g.bgs.some(b => b.v === v)) {
-                g.spuds -= p;
-                g.bgs.push({t, v, n});
-                applyBG(t, v);
-                alert("Unlocked: " + n);
-            } else if(g.bgs.some(b => b.v === v)) {
-                applyBG(t,v);
-            }
-        }
-
-        function applyBG(t, v) {
-            if(t === 'color') { 
-                document.body.style.backgroundImage = "none"; 
-                document.body.style.backgroundColor = v; 
-            } else { 
-                document.body.style.backgroundImage = `url('${v}')`; 
-            }
-        }
-
-        function renderLocker() {
-            const container = document.getElementById('locker-grid');
-            container.innerHTML = "";
-            g.bgs.forEach(bg => {
-                const div = document.createElement('div');
-                div.className = (bg.t === 'color') ? "color-box" : "meme-box";
-                if(bg.t === 'color') div.style.background = bg.v;
-                else div.innerText = bg.n;
-                div.onclick = () => applyBG(bg.t, bg.v);
-                container.appendChild(div);
-            });
-        }
-
-        function redeem() {
-            const v = document.getElementById('code-entry').value;
-            if(v === "SuperSpud") document.getElementById('owner-btn').classList.remove('hidden');
-            if(v === "MEGASAUR") g.spuds += 50000;
-            document.getElementById('code-entry').value = "";
-            updateUI();
-        }
-
-        function setSpuds() { g.spuds = parseFloat(document.getElementById('pts-input').value) || 0; updateUI(); }
-        function addPoints(n) { g.spuds += n; updateUI(); }
-        function forceRank(pwr, name, img) { g.clickPwr = pwr; g.rName = name + " Spud"; g.char = img; updateUI(); }
-        function copyAllCodes() { navigator.clipboard.writeText("SuperSpud, MEGASAUR, GUNS, SPUD600"); alert("Codes Copied!"); }
-        function unlockAllMemes() {
-            if(!g.bgs.some(b => b.n === 'SHREK')) g.bgs.push({t:'image', v:'bg_meme1.jpg', n:'SHREK'});
-            if(!g.bgs.some(b => b.n === 'MASHUP')) g.bgs.push({t:'image', v:'bg_meme2.jpg', n:'MASHUP'});
-            if(!g.bgs.some(b => b.n === 'SPONGE')) g.bgs.push({t:'image', v:'bg_meme3.jpg', n:'SPONGE'});
-            alert("All Memes Unlocked!");
-        }
-        function resetData() { if(confirm("Are you sure? This deletes everything!")) { localStorage.clear(); location.reload(); } }
-        function saveGame() { localStorage.setItem('spudMemeEdition', JSON.stringify(g)); alert("Saved!"); }
+        function unlockAll() { g.bgs.push({t:'image',v:'bg_meme1.jpg',n:'SHREK'},{t:'image',v:'bg_meme2.jpg',n:'MASHUP'}); alert("Unlocked All!"); }
+        function saveGame() { localStorage.setItem('spudDefinitiveSave', JSON.stringify(g)); alert("Saved!"); }
         function startGame() { document.getElementById('home-menu').classList.add('hidden'); }
         function showScreen(id) {
             document.querySelectorAll('.overlay-menu').forEach(m => m.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
             if(id === 'locker-menu') renderLocker();
         }
-        function toggleFS() {
-            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
-            else document.exitFullscreen();
-        }
+        function updateVol() { document.getElementById('click-sound').volume = document.getElementById('vol-slider').value; }
+        function toggleFS() { if(!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
     </script>
 </body>
 </html>
