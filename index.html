@@ -108,7 +108,7 @@
         <button class="big-button" onclick="showScreen('shop-menu')">🛒 BACKGROUND SHOP</button>
         <button class="big-button" onclick="showScreen('locker-menu')">📦 MY LOCKER</button>
         <button class="big-button" onclick="showScreen('codes-menu')">🔑 REDEEM CODES</button>
-        <button id="owner-btn" class="big-button hidden" style="border-color: var(--owner-magenta); color: var(--owner-magenta);" onclick="showScreen('owner-panel')">⚡ OWNER PANEL</button>
+        <button id="owner-btn" class="big-button hidden" style="border-color: var(--owner-Eddie); color: var(--owner-Eddie);" onclick="showScreen('owner-panel')">⚡ OWNER PANEL</button>
     </div>
 
     <div id="shop-menu" class="overlay-menu hidden">
@@ -221,8 +221,8 @@
         }
 
         function evolve() {
-            if (g.spuds >= 5000) {
-                g.spuds -= 5000;
+            if (g.spuds >= 15'000) {
+                g.spuds -= 15'000;
                 g.rank++;
                 if (g.rank === 2) { g.rName = "Swag Spud"; g.char = "spud_swag.png"; g.clickPwr += 2; }
                 else if (g.rank === 3) { g.rName = "King Spud"; g.char = "spud_king.png"; g.clickPwr += 5; }
@@ -231,7 +231,7 @@
                 alert("EVOLVED TO: " + g.rName);
                 updateUI();
             } else {
-                alert("Need 5,000 Spuds!");
+                alert("Need 15'000 Spuds!");
             }
         }
 
