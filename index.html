@@ -16,7 +16,7 @@
             --potato-gold: #d4af37;
             --creamy-text: #ffcc66;
             --stop-red: #cc0000;
-            --owner-Eddie: #ff00ff;
+            --owner-eddie: #ff00ff;
         }
 
         * { box-sizing: border-box; font-family: 'Patrick Hand', cursive; user-select: none; }
@@ -69,6 +69,13 @@
         }
         .big-button:hover { background: var(--potato-gold); color: #000; transform: scale(1.07); }
 
+        .home-spud-icon {
+            width: 240px;
+            height: 240px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
         /* --- GRID SYSTEMS --- */
         .ui-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px; background: #111; border-radius: 15px; width: 100%; max-width: 800px; }
         .color-box { width: 70px; height: 70px; border-radius: 12px; border: 2px solid white; cursor: pointer; margin: auto; }
@@ -76,7 +83,7 @@
 
         /* --- OWNER PANEL --- */
         .owner-window {
-            background: #080808; border: 3px solid var(--owner-magenta);
+            background: #080808; border: 3px solid var(--owner-eddie);
             width: 95%; max-width: 900px; padding: 20px; border-radius: 20px;
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
         }
@@ -101,14 +108,14 @@
         <div class="top-right-tools">
             <div class="big-button" style="width: auto; padding: 5px 15px;" onclick="toggleFS()">⛶</div>
         </div>
-        <img src="icon.png" style="width: 150px;">
-        <h1 style="font-size: 5rem; color: var(--potato-gold);">🆂🅿🆄🅳 🅲🅻🅸🅲🅺🅴🆁</h1>
+        <img src="icon.png" class="home-spud-icon">
+        <h1 style="font-size: 5rem; color: var(--potato-gold);">🆂🅿🆄🅳 🅲🅻🅸🅲🅺🅴 * </h1>
         <button class="big-button" onclick="startGame()">▶ PLAY GAME</button>
         <button class="big-button" onclick="saveGame()">💾 SAVE DATA</button>
         <button class="big-button" onclick="showScreen('shop-menu')">🛒 BACKGROUND SHOP</button>
         <button class="big-button" onclick="showScreen('locker-menu')">📦 MY LOCKER</button>
         <button class="big-button" onclick="showScreen('codes-menu')">🔑 REDEEM CODES</button>
-        <button id="owner-btn" class="big-button hidden" style="border-color: var(--owner-Eddie); color: var(--owner-Eddie);" onclick="showScreen('owner-panel')">⚡ OWNER PANEL</button>
+        <button id="owner-btn" class="big-button hidden" style="border-color: var(--owner-eddie); color: var(--owner-eddie);" onclick="showScreen('owner-panel')">⚡ OWNER PANEL</button>
     </div>
 
     <div id="shop-menu" class="overlay-menu hidden">
@@ -162,7 +169,7 @@
             <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('field', 12)">Spud Field (<span id="c-field">250</span>)</button>
             <button class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('factory', 80)">Factory (<span id="c-factory">2k</span>)</button>
             <div style="flex-grow:1"></div>
-            <button id="evolve-btn" class="big-button" style="width:100%; background: #4b3621;" onclick="evolve()">EVOLVE (5k)</button>
+            <button id="evolve-btn" class="big-button" style="width:100%; background: #4b3621;" onclick="evolve()">EVOLVE (15k)</button>
         </div>
         <div id="potato-central">
             <h1 class="counter" id="spud-count">0</h1>
@@ -192,7 +199,6 @@
             const saved = localStorage.getItem('spudDefinitiveSave');
             if(saved) g = JSON.parse(saved);
             
-            // Set sound to a default 0.5 volume since slider is gone
             document.getElementById('click-sound').volume = 0.5;
 
             const shop = document.getElementById('color-shop');
@@ -221,17 +227,17 @@
         }
 
         function evolve() {
-            if (g.spuds >= 15'000) {
-                g.spuds -= 15'000;
+            if (g.spuds >= 15000) {
+                g.spuds -= 15000;
                 g.rank++;
                 if (g.rank === 2) { g.rName = "Swag Spud"; g.char = "spud_swag.png"; g.clickPwr += 2; }
                 else if (g.rank === 3) { g.rName = "King Spud"; g.char = "spud_king.png"; g.clickPwr += 5; }
-                else { g.rName = "Gun Spud"; g.char = "spud_gun.png"; g.clickPwr += 10; }
+                else { g.rName = "Gunsford"; g.char = "spud_gunsford.png"; g.clickPwr += 10; }
                 triggerFx('gold');
                 alert("EVOLVED TO: " + g.rName);
                 updateUI();
             } else {
-                alert("Need 15'000 Spuds!");
+                alert("Need 15,000 Spuds!");
             }
         }
 
