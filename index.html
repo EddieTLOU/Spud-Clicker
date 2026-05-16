@@ -117,8 +117,13 @@
         .skin-selector-card:hover { border-color: var(--owner-eddie); background: #333; }
         .skin-selector-card.active { border-color: var(--owner-eddie); background: rgba(255,0,255,0.1); }
         .skin-selector-card img { width: 100%; height: 70px; object-fit: contain; }
-        .skin-selector-card p { margin: 4px 0 0 0; font-size: 0.9rem; }
-        .code-list-box { grid-column: span 2; background: #000; border: 1px solid #0f0; color: #0f0; font-family: monospace; padding: 10px; font-size: 0.9rem; max-height: 100px; overflow-y: auto; }
+        .skin-selector-card p { margin: 4px 0 0 0; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        /* Workshop inputs */
+        .workshop-input { width: 100%; background: #000; color: #fff; border: 1px solid #55px; padding: 6px; font-size: 1.1rem; border-radius: 6px; border: 1px solid var(--potato-gold); }
+        .workshop-select { width: 100%; background: #000; color: var(--potato-gold); border: 1px solid var(--potato-gold); padding: 6px; font-size: 1.1rem; border-radius: 6px; }
+
+        .code-list-box { grid-column: span 2; background: #000; border: 1px solid #0f0; color: #0f0; font-family: monospace; padding: 10px; font-size: 0.9rem; max-height: 80px; overflow-y: auto; }
 
         /* --- GAMEPLAY --- */
         #main-game-screen { display: grid; grid-template-columns: 350px 1fr 350px; height: 100vh; }
@@ -141,7 +146,7 @@
             <div class="big-button" style="width: auto; padding: 5px 15px;" onclick="toggleFS()">⛶</div>
         </div>
         <img src="icon.png" class="home-spud-icon">
-        <h1 style="font-size: 5rem; color: var(--potato-gold);">🆂🅿🆄🅳 🅲🅻🅸🅲🅺🅴🆁</h1>
+        <h1 style="font-size: 5rem; color: var(--potato-gold);">🆂🅿🆄🅳 🅲🅻🅸🅲🅺🅴℞</h1>
         <button class="big-button" onclick="startGame()">▶ PLAY GAME</button>
         <button class="big-button" onclick="showScreen('shop-menu')">🛒 BACKGROUND SHOP</button>
         <button class="big-button" onclick="showScreen('locker-menu')">📦 MY LOCKER</button>
@@ -173,7 +178,7 @@
     </div>
 
     <div id="locker-menu" class="overlay-menu hidden">
-        <h1 style="color: var(--potato-gold);">MY LOCKER</h1>
+        <h1 style="color: var(--potato-gold); margin-top: 0;">MY LOCKER</h1>
         <div id="locker-grid" class="ui-grid"></div>
         <button class="big-button" onclick="showScreen('home-menu')" style="margin-top: 20px;">BACK</button>
     </div>
@@ -186,41 +191,69 @@
     </div>
 
     <div id="owner-panel" class="overlay-menu hidden" style="border-color: var(--owner-eddie);">
-        <h1 style="color: var(--owner-eddie); margin-top: 0;">OWNER ADMIN</h1>
+        <h1 style="color: var(--owner-eddie); margin-top: 0; margin-bottom: 5px;">OWNER ADMIN CONTROL</h1>
         <div class="owner-window">
             
             <div class="owner-card">
                 <h3 style="margin: 0; color: var(--owner-eddie);">Custom Currency Generator</h3>
                 <p style="margin: 2px 0;">Enter exact spud total value to inject into bank:</p>
                 <input type="number" id="owner-custom-currency-input" value="1000000" style="width: 100%; background: #000; color: #ff00ff; border: 2px solid #ff00ff; font-size: 1.5rem; padding: 5px; text-align: center; border-radius: 8px;">
-                <button class="big-button" style="width:100%; font-size: 1.2rem; margin: 5px 0 0 0;" onclick="injectCustomCurrency()">⚡ INJECT SPUDS</button>
+                <button class="big-button" style="width:100%; font-size: 1.2rem; margin: 8px 0 0 0;" onclick="injectCustomCurrency()">⚡ INJECT SPUDS</button>
             </div>
             
             <div class="owner-card">
                 <h3 style="margin: 0; color: var(--owner-eddie);">Force Character Skin Switcher</h3>
                 <div class="owner-skin-row">
-                    <div class="skin-selector-card" id="skin-card-1" onclick="ownerSetSkin(1, 'Normal Spud', 'spud_main.png')">
-                        <img src="spud_main.png" onerror="this.src='https://placehold.co/100?text=Normal'">
-                        <p>Normal</p>
+                    <div class="skin-selector-card" id="skin-card-1" onclick="ownerSetSkin(1)">
+                        <img id="skin-img-1" src="spud_main.png" onerror="this.src='https://placehold.co/100?text=Normal'">
+                        <p id="skin-txt-1">Normal</p>
                     </div>
-                    <div class="skin-selector-card" id="skin-card-2" onclick="ownerSetSkin(2, 'Swag Spud', 'spud_swag.png')">
-                        <img src="spud_swag.png" onerror="this.src='https://placehold.co/100?text=Swag'">
-                        <p>Swag</p>
+                    <div class="skin-selector-card" id="skin-card-2" onclick="ownerSetSkin(2)">
+                        <img id="skin-img-2" src="spud_swag.png" onerror="this.src='https://placehold.co/100?text=Swag'">
+                        <p id="skin-txt-2">Swag</p>
                     </div>
-                    <div class="skin-selector-card" id="skin-card-3" onclick="ownerSetSkin(3, 'King Spud', 'spud_king.png')">
-                        <img src="spud_king.png" onerror="this.src='https://placehold.co/100?text=King'">
-                        <p>King</p>
+                    <div class="skin-selector-card" id="skin-card-3" onclick="ownerSetSkin(3)">
+                        <img id="skin-img-3" src="spud_king.png" onerror="this.src='https://placehold.co/100?text=King'">
+                        <p id="skin-txt-3">King</p>
                     </div>
-                    <div class="skin-selector-card" id="skin-card-4" onclick="ownerSetSkin(4, 'Gun Spud', 'spud_gun.png')">
-                        <img src="spud_gun.png" onerror="this.src='https://placehold.co/100?text=Gun Spud'">
-                        <p>Gun Spud</p>
+                    <div class="skin-selector-card" id="skin-card-4" onclick="ownerSetSkin(4)">
+                        <img id="skin-img-4" src="spud_gun.png" onerror="this.src='https://placehold.co/100?text=Gun+Spud'">
+                        <p id="skin-txt-4">Gun Spud</p>
                     </div>
                 </div>
             </div>
 
-            <div class="owner-card" style="grid-column: span 2; flex-direction: row; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.3rem;">Instant Content Unlock Tool:</span>
-                <button class="big-button" style="width:250px; font-size: 1.1rem; margin:0;" onclick="unlockAll()">Unlock All Wraps</button>
+            <div class="owner-card" style="grid-column: span 2; border-color: var(--potato-gold);">
+                <h3 style="margin: 0; color: var(--potato-gold);">Device Asset Injection Workshop (Local Tab Only)</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; align-items: end; margin-top: 5px;">
+                    <div>
+                        <label style="font-size: 0.9rem; color: #aaa;">Target Rank Slot:</label>
+                        <select id="workshop-slot-select" class="workshop-select">
+                            <option value="1">Rank 1 Slot</option>
+                            <option value="2">Rank 2 Slot</option>
+                            <option value="3">Rank 3 Slot</option>
+                            <option value="4">Rank 4 Slot</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.9rem; color: #aaa;">Custom Rank Name:</label>
+                        <input type="text" id="workshop-name-input" class="workshop-input" placeholder="e.g. Meath Spud">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.9rem; color: #aaa;">Upload Image File:</label>
+                        <input type="file" id="workshop-file-input" accept="image/*" style="display: none;" onchange="handleWorkshopUpload(event)">
+                        <button class="workshop-input" style="background: #222; cursor: pointer; text-align: center;" onclick="document.getElementById('workshop-file-input').click()">📁 Choose File</button>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                    <span style="color: #ff9900; font-size: 1rem;">💰 Cost per injection: <strong>500,000 Spuds</strong></span>
+                    <button id="btn-workshop-inject" class="big-button" style="width: 280px; margin: 0; font-size: 1.2rem; padding: 6px;" onclick="applyCustomAsset()">🛠️ Inject Custom Asset</button>
+                </div>
+            </div>
+
+            <div class="owner-card" style="grid-column: span 2; flex-direction: row; justify-content: space-between; align-items: center; padding: 10px 15px;">
+                <span style="font-size: 1.2rem;">Instant Content Unlock Tool:</span>
+                <button class="big-button" style="width:250px; font-size: 1.1rem; margin:0; padding: 5px;" onclick="unlockAll()">Unlock All Wraps</button>
             </div>
 
             <div class="code-list-box" id="master-code-display">
@@ -233,7 +266,7 @@
     <div id="main-game-screen">
         <div class="sidebar">
             <h2>UPGRADES</h2>
-            <button id="btn-fert" class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyClickUpgrade()">Spud Fertilizer (+1 CPC) (<span id="c-fert">10</span>)</button>
+            <button id="btn-fert" class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyClickUpgrade()">Spud Fertilizer (+1 DPC) (<span id="c-fert">10</span>)</button>
             <button id="btn-hoe" class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('hoe', 1)">Hand Hoe (+1 SPS) (<span id="c-hoe">15</span>)</button>
             <button id="btn-field" class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('field', 12)">Spud Field (+12 SPS) (<span id="c-field">250</span>)</button>
             <button id="btn-factory" class="big-button" style="width:100%; font-size: 1.2rem;" onclick="buyItem('factory', 80)">Factory (+80 SPS) (<span id="c-factory">2k</span>)</button>
@@ -243,7 +276,7 @@
         <div id="potato-central">
             <h1 class="counter" id="spud-count">0</h1>
             <p class="stat-text">SPS (Spuds Per Sec): <span id="sps-count">0</span></p>
-            <p class="stat-text">CPC (Clicks Per Click): <span id="dpc-count">1</span></p>
+            <p class="stat-text">DPC (Damage Per Click): <span id="dpc-count">1</span></p>
             <img id="main-spud" src="spud_main.png" class="potato-image" onclick="clickSpud()">
             <h2 id="rank-display">Rank: Normal Spud</h2>
         </div>
@@ -256,13 +289,21 @@
     </div>
 
     <script>
+        // Core game schema data container
         let g = {
             spuds: 0, sps: 0, clickPwr: 1, rank: 1,
-            rName: "Normal Spud", char: "spud_main.png",
             bgs: [{t: 'color', v: '#000000', n: 'Default'}],
-            costs: { fert: 10, hoe: 15, field: 250, factory: 2000 }
+            costs: { fert: 10, hoe: 15, field: 250, factory: 2000 },
+            // Dictionary mapping structure storing custom configuration variables safely 
+            rankCustoms: {
+                1: { name: "Normal Spud", img: "spud_main.png" },
+                2: { name: "Swag Spud", img: "spud_swag.png" },
+                3: { name: "King Spud", img: "spud_king.png" },
+                4: { name: "Gun Spud", img: "spud_gun.png" }
+            }
         };
 
+        let tempUploadedImgData = ""; 
         const colorPalette = ["#e67e22", "#2ecc71", "#9b59b6", "#c0392b", "#3498db", "#000000"];
 
         function showToast(msg) {
@@ -274,7 +315,16 @@
 
         function initGame() {
             const saved = localStorage.getItem('spudDefinitiveSave');
-            if(saved) g = JSON.parse(saved);
+            if(saved) {
+                const parsed = JSON.parse(saved);
+                // Backward-compatibility configuration injection safety checks
+                if(!parsed.rankCustoms) parsed.rankCustoms = g.rankCustoms;
+                // Force rank 4 corrections if transitioning older save files
+                if(parsed.rankCustoms[4] && parsed.rankCustoms[4].name === "Gunsford") {
+                    parsed.rankCustoms[4] = { name: "Gun Spud", img: "spud_gun.png" };
+                }
+                g = parsed;
+            }
             
             if(!g.costs.fert) g.costs.fert = 10;
 
@@ -330,11 +380,12 @@
             if (g.spuds >= 15000) {
                 g.spuds -= 15000;
                 g.rank++;
-                if (g.rank === 2) { g.rName = "Swag Spud"; g.char = "spud_swag.png"; g.clickPwr += 2; }
-                else if (g.rank === 3) { g.rName = "King Spud"; g.char = "spud_king.png"; g.clickPwr += 5; }
-                else { g.rName = "Gunsford"; g.char = "spud_gunsford.png"; g.clickPwr += 10; }
+                if(g.rank > 4) g.rank = 4; // Max boundaries check capped gracefully
+                
+                let activeRankSetup = g.rankCustoms[g.rank];
+                
                 triggerFx('gold');
-                showToast("EVOLVED TO: " + g.rName);
+                showToast("EVOLVED TO: " + activeRankSetup.name);
                 updateUI();
             }
         }
@@ -349,11 +400,55 @@
             }
         }
 
-        function ownerSetSkin(rankNum, rankName, imageSrc) {
+        function ownerSetSkin(rankNum) {
             g.rank = rankNum;
-            g.rName = rankName;
-            g.char = imageSrc;
-            showToast(`Character changed to: ${rankName}`);
+            let activeRankSetup = g.rankCustoms[rankNum];
+            showToast(`Character swapped to: ${activeRankSetup.name}`);
+            updateUI();
+        }
+
+        /* --- DEVICE ASSET MODDING SUITE CALCULATIONS --- */
+        function handleWorkshopUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                tempUploadedImgData = e.target.result; // Saves base64 structural string representation safely
+                showToast("Image loaded into workshop memory buffer!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function applyCustomAsset() {
+            const targetSlot = document.getElementById('workshop-slot-select').value;
+            const customName = document.getElementById('workshop-name-input').value.trim();
+
+            if(g.spuds < 500000) {
+                showToast("Transaction failed: Insufficient Spuds!");
+                return;
+            }
+            if(!customName) {
+                showToast("Error: Please provide a custom rank name!");
+                return;
+            }
+            if(!tempUploadedImgData) {
+                showToast("Error: No local image asset file loaded!");
+                return;
+            }
+
+            // Deduct funds and override device parameters
+            g.spuds -= 500000;
+            g.rankCustoms[targetSlot] = {
+                name: customName,
+                img: tempUploadedImgData
+            };
+
+            // Wipe out workshop inputs
+            document.getElementById('workshop-name-input').value = "";
+            tempUploadedImgData = "";
+            
+            showToast(`Rank ${targetSlot} Asset Successfully Injected locally!`);
             updateUI();
         }
 
@@ -374,6 +469,12 @@
             if(v === "FREEZE") { 
                 g.spuds = 0; g.sps = 0; g.clickPwr = 1; 
                 g.costs = {fert: 10, hoe: 15, field: 250, factory: 2000}; 
+                g.rankCustoms = {
+                    1: { name: "Normal Spud", img: "spud_main.png" },
+                    2: { name: "Swag Spud", img: "spud_swag.png" },
+                    3: { name: "King Spud", img: "spud_king.png" },
+                    4: { name: "Gun Spud", img: "spud_gun.png" }
+                };
                 triggerFx('blue'); f = true; 
             }
             if(v === "ECHO") { setInterval(() => clickSpud(), 1000); f = true; }
@@ -428,6 +529,9 @@
         }
 
         function updateUI() {
+            let activeRankSetup = g.rankCustoms[g.rank];
+
+            // Core counter variables engine output tracking text blocks
             document.getElementById('spud-count').innerText = Math.floor(g.spuds).toLocaleString();
             document.getElementById('sps-count').innerText = g.sps.toLocaleString();
             document.getElementById('dpc-count').innerText = g.clickPwr.toLocaleString();
@@ -437,22 +541,33 @@
             document.getElementById('c-field').innerText = g.costs.field.toLocaleString();
             document.getElementById('c-factory').innerText = g.costs.factory.toLocaleString();
             
-            document.getElementById('main-spud').src = g.char;
-            document.getElementById('rank-display').innerText = "Rank: " + g.rName;
+            document.getElementById('main-spud').src = activeRankSetup.img;
+            document.getElementById('rank-display').innerText = "Rank: " + activeRankSetup.name;
 
-            // Graying out setup calculations
+            // Graying out shop item states dynamic analysis loops
             document.getElementById('btn-fert').disabled = (g.spuds < g.costs.fert);
             document.getElementById('btn-hoe').disabled = (g.spuds < g.costs.hoe);
             document.getElementById('btn-field').disabled = (g.spuds < g.costs.field);
             document.getElementById('btn-factory').disabled = (g.spuds < g.costs.factory);
-            document.getElementById('evolve-btn').disabled = (g.spuds < 15000);
+            document.getElementById('evolve-btn').disabled = (g.spuds < 15000 || g.rank >= 4);
 
-            // Toggle visual activation feedback frames inside owner skin window
+            // Gray out workshop engine state calculation parameters
+            document.getElementById('btn-workshop-inject').disabled = (g.spuds < 500000);
+
+            // Sync visual panels updates dynamically inside admin elements views frames
+            for(let i = 1; i <= 4; i++) {
+                let imgEl = document.getElementById(`skin-img-${i}`);
+                let txtEl = document.getElementById(`skin-txt-${i}`);
+                if(imgEl && g.rankCustoms[i]) {
+                    imgEl.src = g.rankCustoms[i].img;
+                    txtEl.innerText = g.rankCustoms[i].name;
+                }
+            }
+
             document.querySelectorAll('.skin-selector-card').forEach(c => c.classList.remove('active'));
             const activeCard = document.getElementById(`skin-card-${g.rank}`);
             if(activeCard) activeCard.classList.add('active');
 
-            // Visual shop grey states
             if(document.getElementById('bg-shrek-btn')) {
                 document.getElementById('bg-shrek-btn').disabled = (g.spuds < 5000 && !g.bgs.some(b => b.v === 'bg_meme1.jpg'));
                 document.getElementById('bg-mashup-btn').disabled = (g.spuds < 5000 && !g.bgs.some(b => b.v === 'bg_meme2.jpg'));
