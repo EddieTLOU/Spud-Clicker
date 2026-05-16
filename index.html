@@ -55,7 +55,7 @@
             z-index: 1000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border: 15px solid var(--wood-medium);
-            padding: 40px;
+            padding: 20px 40px;
             overflow-y: auto;
         }
         .hidden { display: none !important; }
@@ -79,14 +79,7 @@
             text-align: center;
         }
         .big-button:hover:not(:disabled) { background: var(--potato-gold); color: #000; transform: scale(1.07); }
-        
-        /* Grayed out states */
-        .big-button:disabled {
-            opacity: 0.35;
-            cursor: not-allowed;
-            border-color: #555;
-            color: #888;
-        }
+        .big-button:disabled { opacity: 0.35; cursor: not-allowed; border-color: #555; color: #888; }
 
         .home-spud-icon {
             width: 240px;
@@ -95,19 +88,37 @@
             margin-bottom: 10px;
         }
 
-        /* --- GRID SYSTEMS --- */
-        .ui-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px; background: #111; border-radius: 15px; width: 100%; max-width: 800px; }
-        .color-box { width: 70px; height: 70px; border-radius: 12px; border: 2px solid white; cursor: pointer; margin: auto; }
-        .meme-box { background: #222; border: 2px solid var(--potato-gold); padding: 15px; border-radius: 10px; cursor: pointer; text-align: center; font-weight: bold; min-height: 60px; display: flex; align-items: center; justify-content: center; }
+        /* --- GRID SYSTEMS & VISUAL PREVIEWS --- */
+        .ui-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; background: #111; border-radius: 15px; width: 100%; max-width: 900px; }
+        .color-box { width: 80px; height: 80px; border-radius: 12px; border: 3px solid white; cursor: pointer; margin: auto; transition: 0.2s; }
+        .color-box:hover { transform: scale(1.1); }
+        
+        .visual-shop-card {
+            background: #222; border: 3px solid var(--potato-gold); border-radius: 15px;
+            padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+            cursor: pointer; transition: 0.2s; text-align: center; color: inherit; width: 100%;
+        }
+        .visual-shop-card:hover:not(:disabled) { transform: translateY(-5px); background: #2c2c2c; }
+        .visual-shop-card:disabled { opacity: 0.35; cursor: not-allowed; border-color: #555; }
+        .bg-preview-img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; border: 2px solid #444; }
 
-        /* --- OWNER PANEL --- */
+        /* --- OWNER PANEL CONFIGS --- */
         .owner-window {
             background: #080808; border: 3px solid var(--owner-eddie);
-            width: 95%; max-width: 900px; padding: 20px; border-radius: 20px;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+            width: 100%; max-width: 950px; padding: 20px; border-radius: 20px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
         }
-        .owner-card { background: #111; padding: 15px; border-radius: 12px; border: 1px solid #333; }
-        .code-list-box { grid-column: span 2; background: #000; border: 1px solid #0f0; color: #0f0; font-family: monospace; padding: 10px; font-size: 0.9rem; max-height: 150px; overflow-y: auto; }
+        .owner-card { background: #111; padding: 15px; border-radius: 12px; border: 1px solid #333; display: flex; flex-direction: column; gap: 10px; }
+        .owner-skin-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .skin-selector-card {
+            background: #222; border: 2px solid #444; border-radius: 8px; padding: 5px;
+            text-align: center; cursor: pointer; transition: 0.2s;
+        }
+        .skin-selector-card:hover { border-color: var(--owner-eddie); background: #333; }
+        .skin-selector-card.active { border-color: var(--owner-eddie); background: rgba(255,0,255,0.1); }
+        .skin-selector-card img { width: 100%; height: 70px; object-fit: contain; }
+        .skin-selector-card p { margin: 4px 0 0 0; font-size: 0.9rem; }
+        .code-list-box { grid-column: span 2; background: #000; border: 1px solid #0f0; color: #0f0; font-family: monospace; padding: 10px; font-size: 0.9rem; max-height: 100px; overflow-y: auto; }
 
         /* --- GAMEPLAY --- */
         #main-game-screen { display: grid; grid-template-columns: 350px 1fr 350px; height: 100vh; }
@@ -139,47 +150,84 @@
     </div>
 
     <div id="shop-menu" class="overlay-menu hidden">
-        <h1 style="color: var(--potato-gold);">BACKGROUND SHOP</h1>
-        <h3>Colors (500 Spuds)</h3>
-        <div class="ui-grid" id="color-shop"></div>
-        <h3>Meme Wraps (5,000 Spuds)</h3>
+        <h1 style="color: var(--potato-gold); margin-top: 0;">BACKGROUND SHOP</h1>
+        <h3 style="margin: 5px 0;">Colors (500 Spuds)</h3>
+        <div class="ui-grid" id="color-shop" style="grid-template-columns: repeat(6, 1fr); max-width: 600px; padding: 10px;"></div>
+        
+        <h3 style="margin: 15px 0 5px 0;">Meme Background Wraps (5,000 Spuds)</h3>
         <div class="ui-grid">
-            <button id="bg-shrek-btn" class="meme-box" style="width:100%; color:inherit;" onclick="buyBG('image', 'bg_meme1.jpg', 'SHREK', 5000)">SHREK SWAMP</button>
-            <button id="bg-mashup-btn" class="meme-box" style="width:100%; color:inherit;" onclick="buyBG('image', 'bg_meme2.jpg', 'MASHUP', 5000)">MEME MASHUP</button>
-            <button id="bg-sponge-btn" class="meme-box" style="width:100%; color:inherit;" onclick="buyBG('image', 'bg_meme3.jpg', 'SPONGE', 5000)">RAINBOW SPONGEBOB</button>
+            <button id="bg-shrek-btn" class="visual-shop-card" onclick="buyBG('image', 'bg_meme1.jpg', 'SHREK SWAMP', 5000)">
+                <img src="bg_meme1.jpg" class="bg-preview-img" onerror="this.src='https://placehold.co/300x150?text=Shrek+Swamp+Asset'">
+                <div style="font-size: 1.3rem; font-weight: bold;">SHREK SWAMP</div>
+            </button>
+            <button id="bg-mashup-btn" class="visual-shop-card" onclick="buyBG('image', 'bg_meme2.jpg', 'MEME MASHUP', 5000)">
+                <img src="bg_meme2.jpg" class="bg-preview-img" onerror="this.src='https://placehold.co/300x150?text=Meme+Mashup+Asset'">
+                <div style="font-size: 1.3rem; font-weight: bold;">MEME MASHUP</div>
+            </button>
+            <button id="bg-sponge-btn" class="visual-shop-card" onclick="buyBG('image', 'bg_meme3.jpg', 'RAINBOW SPONGE', 5000)">
+                <img src="bg_meme3.jpg" class="bg-preview-img" onerror="this.src='https://placehold.co/300x150?text=Spongebob+Asset'">
+                <div style="font-size: 1.3rem; font-weight: bold;">RAINBOW SPONGEBOB</div>
+            </button>
         </div>
-        <button class="big-button" onclick="showScreen('home-menu')">BACK</button>
+        <button class="big-button" onclick="showScreen('home-menu')" style="margin-top: 20px;">BACK</button>
     </div>
 
     <div id="locker-menu" class="overlay-menu hidden">
         <h1 style="color: var(--potato-gold);">MY LOCKER</h1>
         <div id="locker-grid" class="ui-grid"></div>
-        <button class="big-button" onclick="showScreen('home-menu')">BACK</button>
+        <button class="big-button" onclick="showScreen('home-menu')" style="margin-top: 20px;">BACK</button>
     </div>
 
     <div id="codes-menu" class="overlay-menu hidden">
         <h1>REDEEM CODES</h1>
-        <input type="text" id="code-entry" style="font-size: 2rem; text-align: center; width: 400px; background: #000; color: gold; border: 2px solid gold;">
+        <input type="text" id="code-entry" style="font-size: 2rem; text-align: center; width: 400px; background: #000; color: gold; border: 2px solid gold; border-radius: 10px; margin-bottom: 15px;">
         <button class="big-button" onclick="redeem()">REDEEM</button>
         <button class="big-button" onclick="showScreen('home-menu')">BACK</button>
     </div>
 
     <div id="owner-panel" class="overlay-menu hidden" style="border-color: var(--owner-eddie);">
-        <h1 style="color: var(--owner-eddie);">OWNER ADMIN</h1>
+        <h1 style="color: var(--owner-eddie); margin-top: 0;">OWNER ADMIN</h1>
         <div class="owner-window">
+            
             <div class="owner-card">
-                <p>Add Currency</p>
-                <button class="big-button" style="width:100%; font-size: 1rem;" onclick="g.spuds += 1000000; updateUI(); showToast('+1,000,000 Spuds Loaded!')">+1 Million</button>
+                <h3 style="margin: 0; color: var(--owner-eddie);">Custom Currency Generator</h3>
+                <p style="margin: 2px 0;">Enter exact spud total value to inject into bank:</p>
+                <input type="number" id="owner-custom-currency-input" value="1000000" style="width: 100%; background: #000; color: #ff00ff; border: 2px solid #ff00ff; font-size: 1.5rem; padding: 5px; text-align: center; border-radius: 8px;">
+                <button class="big-button" style="width:100%; font-size: 1.2rem; margin: 5px 0 0 0;" onclick="injectCustomCurrency()">⚡ INJECT SPUDS</button>
             </div>
+            
             <div class="owner-card">
-                <p>Unlock Content</p>
-                <button class="big-button" style="width:100%; font-size: 1rem;" onclick="unlockAll()">Unlock All BGs</button>
+                <h3 style="margin: 0; color: var(--owner-eddie);">Force Character Skin Switcher</h3>
+                <div class="owner-skin-row">
+                    <div class="skin-selector-card" id="skin-card-1" onclick="ownerSetSkin(1, 'Normal Spud', 'spud_main.png')">
+                        <img src="spud_main.png" onerror="this.src='https://placehold.co/100?text=Normal'">
+                        <p>Normal</p>
+                    </div>
+                    <div class="skin-selector-card" id="skin-card-2" onclick="ownerSetSkin(2, 'Swag Spud', 'spud_swag.png')">
+                        <img src="spud_swag.png" onerror="this.src='https://placehold.co/100?text=Swag'">
+                        <p>Swag</p>
+                    </div>
+                    <div class="skin-selector-card" id="skin-card-3" onclick="ownerSetSkin(3, 'King Spud', 'spud_king.png')">
+                        <img src="spud_king.png" onerror="this.src='https://placehold.co/100?text=King'">
+                        <p>King</p>
+                    </div>
+                    <div class="skin-selector-card" id="skin-card-4" onclick="ownerSetSkin(4, 'Gunsford', 'spud_gunsford.png')">
+                        <img src="spud_gunsford.png" onerror="this.src='https://placehold.co/100?text=Gunsford'">
+                        <p>Gunsford</p>
+                    </div>
+                </div>
             </div>
+
+            <div class="owner-card" style="grid-column: span 2; flex-direction: row; justify-content: space-between; align-items: center;">
+                <span style="font-size: 1.3rem;">Instant Content Unlock Tool:</span>
+                <button class="big-button" style="width:250px; font-size: 1.1rem; margin:0;" onclick="unlockAll()">Unlock All Wraps</button>
+            </div>
+
             <div class="code-list-box" id="master-code-display">
                 LOADED CODES: SuperSpud, 50, TURBO, RICHES, GRAVITY, RAINBOW, SMALL, BIGGIE, 1, FREEZE, ECHO
             </div>
         </div>
-        <button class="big-button" onclick="showScreen('home-menu')">EXIT</button>
+        <button class="big-button" onclick="showScreen('home-menu')" style="margin-top: 15px;">EXIT</button>
     </div>
 
     <div id="main-game-screen">
@@ -228,7 +276,6 @@
             const saved = localStorage.getItem('spudDefinitiveSave');
             if(saved) g = JSON.parse(saved);
             
-            // Fail-safe protection if older saves don't include the fert cost tracking variable
             if(!g.costs.fert) g.costs.fert = 10;
 
             document.getElementById('click-sound').volume = 0.5;
@@ -292,6 +339,24 @@
             }
         }
 
+        function injectCustomCurrency() {
+            const amountInput = document.getElementById('owner-custom-currency-input').value;
+            const amt = parseInt(amountInput);
+            if(!isNaN(amt) && amt >= 0) {
+                g.spuds += amt;
+                showToast(`Injected +${amt.toLocaleString()} Spuds!`);
+                updateUI();
+            }
+        }
+
+        function ownerSetSkin(rankNum, rankName, imageSrc) {
+            g.rank = rankNum;
+            g.rName = rankName;
+            g.char = imageSrc;
+            showToast(`Character changed to: ${rankName}`);
+            updateUI();
+        }
+
         function redeem() {
             const v = document.getElementById('code-entry').value;
             const inp = document.getElementById('code-entry');
@@ -307,12 +372,9 @@
             if(v === "BIGGIE") { document.getElementById('main-spud').style.width = "700px"; f = true; }
             if(v === "1") { g.costs = {fert:1, hoe:1, field:1, factory:1}; f = true; }
             if(v === "FREEZE") { 
-                g.spuds = 0; 
-                g.sps = 0; 
-                g.clickPwr = 1; 
+                g.spuds = 0; g.sps = 0; g.clickPwr = 1; 
                 g.costs = {fert: 10, hoe: 15, field: 250, factory: 2000}; 
-                triggerFx('blue'); 
-                f = true; 
+                triggerFx('blue'); f = true; 
             }
             if(v === "ECHO") { setInterval(() => clickSpud(), 1000); f = true; }
 
@@ -324,10 +386,10 @@
             if(g.spuds >= p && !g.bgs.some(b => b.v === v)) {
                 g.spuds -= p; g.bgs.push({t, v, n});
                 applyBG(t, v); updateUI();
-                showToast("Background unlocked!");
+                showToast(`Unlocked ${n}!`);
             } else if(g.bgs.some(b => b.v === v)) { 
                 applyBG(t, v); 
-                showToast("Background applied!");
+                showToast(`${n} applied!`);
             }
         }
 
@@ -339,12 +401,29 @@
         function renderLocker() {
             const container = document.getElementById('locker-grid');
             container.innerHTML = "";
+            
             g.bgs.forEach(bg => {
-                let div = document.createElement('div');
-                div.className = (bg.t === 'color') ? "color-box" : "meme-box";
-                if(bg.t === 'color') div.style.background = bg.v; else div.innerText = bg.n;
-                div.onclick = () => applyBG(bg.t, bg.v);
-                container.appendChild(div);
+                let card = document.createElement('button');
+                card.className = "visual-shop-card";
+                
+                if(bg.t === 'color') {
+                    let cBox = document.createElement('div');
+                    cBox.className = "color-box"; cBox.style.background = bg.v; cBox.style.margin = "15px auto";
+                    card.appendChild(cBox);
+                } else {
+                    let img = document.createElement('img');
+                    img.className = "bg-preview-img"; img.src = bg.v;
+                    img.onerror = function() { this.src = `https://placehold.co/300x150?text=${bg.n}`; };
+                    card.appendChild(img);
+                }
+                
+                let title = document.createElement('div');
+                title.style.fontSize = "1.2rem"; title.style.fontWeight = "bold";
+                title.innerText = bg.n.toUpperCase();
+                card.appendChild(title);
+                
+                card.onclick = () => { applyBG(bg.t, bg.v); showToast(`${bg.n} applied!`); };
+                container.appendChild(card);
             });
         }
 
@@ -361,14 +440,19 @@
             document.getElementById('main-spud').src = g.char;
             document.getElementById('rank-display').innerText = "Rank: " + g.rName;
 
-            // Gray out mechanics checking
+            // Graying out setup calculations
             document.getElementById('btn-fert').disabled = (g.spuds < g.costs.fert);
             document.getElementById('btn-hoe').disabled = (g.spuds < g.costs.hoe);
             document.getElementById('btn-field').disabled = (g.spuds < g.costs.field);
             document.getElementById('btn-factory').disabled = (g.spuds < g.costs.factory);
             document.getElementById('evolve-btn').disabled = (g.spuds < 15000);
 
-            // Background shop gray checks
+            // Toggle visual activation feedback frames inside owner skin window
+            document.querySelectorAll('.skin-selector-card').forEach(c => c.classList.remove('active'));
+            const activeCard = document.getElementById(`skin-card-${g.rank}`);
+            if(activeCard) activeCard.classList.add('active');
+
+            // Visual shop grey states
             if(document.getElementById('bg-shrek-btn')) {
                 document.getElementById('bg-shrek-btn').disabled = (g.spuds < 5000 && !g.bgs.some(b => b.v === 'bg_meme1.jpg'));
                 document.getElementById('bg-mashup-btn').disabled = (g.spuds < 5000 && !g.bgs.some(b => b.v === 'bg_meme2.jpg'));
@@ -377,8 +461,10 @@
         }
 
         function unlockAll() { 
-            g.bgs.push({t:'image',v:'bg_meme1.jpg',n:'SHREK'},{t:'image',v:'bg_meme2.jpg',n:'MASHUP'}); 
-            showToast("Unlocked All BGs!"); 
+            if(!g.bgs.some(b => b.v === 'bg_meme1.jpg')) g.bgs.push({t:'image',v:'bg_meme1.jpg',n:'SHREK SWAMP'});
+            if(!g.bgs.some(b => b.v === 'bg_meme2.jpg')) g.bgs.push({t:'image',v:'bg_meme2.jpg',n:'MEME MASHUP'});
+            if(!g.bgs.some(b => b.v === 'bg_meme3.jpg')) g.bgs.push({t:'image',v:'bg_meme3.jpg',n:'RAINBOW SPONGE'});
+            showToast("All Wraps Unlocked inside Locker!"); 
             updateUI();
         }
         function saveGame() { localStorage.setItem('spudDefinitiveSave', JSON.stringify(g)); showToast("Progress Saved!"); }
