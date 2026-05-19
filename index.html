@@ -109,21 +109,23 @@
             display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
         }
         .owner-card { background: #111; padding: 15px; border-radius: 12px; border: 1px solid #333; display: flex; flex-direction: column; gap: 10px; }
-        .owner-skin-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        
+        /* 9 slots adaptive selector layout matrix grid layout grid-template-columns: repeat(5, 1fr) window frames */
+        .owner-skin-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-height: 180px; overflow-y: auto; padding: 5px; background: #000; border-radius: 8px; }
         .skin-selector-card {
             background: #222; border: 2px solid #444; border-radius: 8px; padding: 5px;
             text-align: center; cursor: pointer; transition: 0.2s;
         }
         .skin-selector-card:hover { border-color: var(--owner-eddie); background: #333; }
         .skin-selector-card.active { border-color: var(--owner-eddie); background: rgba(255,0,255,0.1); }
-        .skin-selector-card img { width: 100%; height: 70px; object-fit: contain; }
-        .skin-selector-card p { margin: 4px 0 0 0; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .skin-selector-card img { width: 100%; height: 50px; object-fit: contain; }
+        .skin-selector-card p { margin: 4px 0 0 0; font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
         /* Workshop inputs */
         .workshop-input { width: 100%; background: #000; color: #fff; border: 1px solid #55px; padding: 6px; font-size: 1.1rem; border-radius: 6px; border: 1px solid var(--potato-gold); }
         .workshop-select { width: 100%; background: #000; color: var(--potato-gold); border: 1px solid var(--potato-gold); padding: 6px; font-size: 1.1rem; border-radius: 6px; }
 
-        .code-list-box { grid-column: span 2; background: #000; border: 1px solid #0f0; color: #0f0; font-family: monospace; padding: 10px; font-size: 0.9rem; max-height: 80px; overflow-y: auto; }
+        .code-list-box { grid-column: span 2; background: #000; border: 1px solid #0f0; color: #0f0; font-family: monospace; padding: 10px; font-size: 0.9rem; max-height: 60px; overflow-y: auto; }
 
         /* --- GAMEPLAY --- */
         #main-game-screen { display: grid; grid-template-columns: 350px 1fr 350px; height: 100vh; }
@@ -146,7 +148,7 @@
             <div class="big-button" style="width: auto; padding: 5px 15px;" onclick="toggleFS()">⛶</div>
         </div>
         <img src="icon.png" class="home-spud-icon">
-        <h1 style="font-size: 5rem; color: var(--potato-gold);">🆂🅿🆄🅳 🅲🅻🅸🅲🅺🅴🆁</h1>
+        <h1 style="font-size: 5rem; color: var(--potato-gold);">🆂🅿🆄🅳 🅲🅻🅸🅲🅺🅴℞</h1>
         <button class="big-button" onclick="startGame()">▶ PLAY GAME</button>
         <button class="big-button" onclick="showScreen('shop-menu')">🛒 BACKGROUND SHOP</button>
         <button class="big-button" onclick="showScreen('locker-menu')">📦 MY LOCKER</button>
@@ -205,20 +207,40 @@
                 <h3 style="margin: 0; color: var(--owner-eddie);">Force Character Skin Switcher</h3>
                 <div class="owner-skin-row">
                     <div class="skin-selector-card" id="skin-card-1" onclick="ownerSetSkin(1)">
-                        <img id="skin-img-1" src="spud_main.png" onerror="this.src='https://placehold.co/100?text=Normal'">
+                        <img id="skin-img-1" src="spud_main.png" onerror="this.src='https://placehold.co/100?text=Rank+1'">
                         <p id="skin-txt-1">Normal</p>
                     </div>
                     <div class="skin-selector-card" id="skin-card-2" onclick="ownerSetSkin(2)">
-                        <img id="skin-img-2" src="spud_swag.png" onerror="this.src='https://placehold.co/100?text=Swag'">
+                        <img id="skin-img-2" src="spud_swag.png" onerror="this.src='https://placehold.co/100?text=Rank+2'">
                         <p id="skin-txt-2">Swag</p>
                     </div>
                     <div class="skin-selector-card" id="skin-card-3" onclick="ownerSetSkin(3)">
-                        <img id="skin-img-3" src="spud_king.png" onerror="this.src='https://placehold.co/100?text=King'">
+                        <img id="skin-img-3" src="spud_king.png" onerror="this.src='https://placehold.co/100?text=Rank+3'">
                         <p id="skin-txt-3">King</p>
                     </div>
                     <div class="skin-selector-card" id="skin-card-4" onclick="ownerSetSkin(4)">
-                        <img id="skin-img-4" src="spud_gun.png" onerror="this.src='https://placehold.co/100?text=Gun+Spud'">
+                        <img id="skin-img-4" src="spud_gun.png" onerror="this.src='https://placehold.co/100?text=Rank+4'">
                         <p id="skin-txt-4">Gun Spud</p>
+                    </div>
+                    <div class="skin-selector-card" id="skin-card-5" onclick="ownerSetSkin(5)">
+                        <img id="skin-img-5" src="spud_rank5.png" onerror="this.src='https://placehold.co/100?text=Rank+5'">
+                        <p id="skin-txt-5">Rank Slot 5</p>
+                    </div>
+                    <div class="skin-selector-card" id="skin-card-6" onclick="ownerSetSkin(6)">
+                        <img id="skin-img-6" src="spud_rank6.png" onerror="this.src='https://placehold.co/100?text=Rank+6'">
+                        <p id="skin-txt-6">Rank Slot 6</p>
+                    </div>
+                    <div class="skin-selector-card" id="skin-card-7" onclick="ownerSetSkin(7)">
+                        <img id="skin-img-7" src="spud_rank7.png" onerror="this.src='https://placehold.co/100?text=Rank+7'">
+                        <p id="skin-txt-7">Rank Slot 7</p>
+                    </div>
+                    <div class="skin-selector-card" id="skin-card-8" onclick="ownerSetSkin(8)">
+                        <img id="skin-img-8" src="spud_rank8.png" onerror="this.src='https://placehold.co/100?text=Rank+8'">
+                        <p id="skin-txt-8">Rank Slot 8</p>
+                    </div>
+                    <div class="skin-selector-card" id="skin-card-9" onclick="ownerSetSkin(9)">
+                        <img id="skin-img-9" src="spud_rank9.png" onerror="this.src='https://placehold.co/100?text=Rank+9'">
+                        <p id="skin-txt-9">Rank Slot 9</p>
                     </div>
                 </div>
             </div>
@@ -233,11 +255,16 @@
                             <option value="2">Rank 2 Slot</option>
                             <option value="3">Rank 3 Slot</option>
                             <option value="4">Rank 4 Slot</option>
+                            <option value="5">Rank 5 Slot</option>
+                            <option value="6">Rank 6 Slot</option>
+                            <option value="7">Rank 7 Slot</option>
+                            <option value="8">Rank 8 Slot</option>
+                            <option value="9">Rank 9 Slot</option>
                         </select>
                     </div>
                     <div>
                         <label style="font-size: 0.9rem; color: #aaa;">Custom Rank Name:</label>
-                        <input type="text" id="workshop-name-input" class="workshop-input" placeholder="e.g. Meath Spud">
+                        <input type="text" id="workshop-name-input" class="workshop-input" placeholder="Enter new custom name">
                     </div>
                     <div>
                         <label style="font-size: 0.9rem; color: #aaa;">Upload Image File:</label>
@@ -289,17 +316,21 @@
     </div>
 
     <script>
-        // Core game schema data container
         let g = {
             spuds: 0, sps: 0, clickPwr: 1, rank: 1,
             bgs: [{t: 'color', v: '#000000', n: 'Default'}],
             costs: { fert: 10, hoe: 15, field: 250, factory: 2000 },
-            // Dictionary mapping structure storing custom configuration variables safely 
+            // Expanded to accommodate exactly 5 new customizable slots safely
             rankCustoms: {
                 1: { name: "Normal Spud", img: "spud_main.png" },
                 2: { name: "Swag Spud", img: "spud_swag.png" },
                 3: { name: "King Spud", img: "spud_king.png" },
-                4: { name: "Gun Spud", img: "spud_gun.png" }
+                4: { name: "Gun Spud", img: "spud_gun.png" },
+                5: { name: "Rank Slot 5", img: "spud_rank5.png" },
+                6: { name: "Rank Slot 6", img: "spud_rank6.png" },
+                7: { name: "Rank Slot 7", img: "spud_rank7.png" },
+                8: { name: "Rank Slot 8", img: "spud_rank8.png" },
+                9: { name: "Rank Slot 9", img: "spud_rank9.png" }
             }
         };
 
@@ -317,11 +348,13 @@
             const saved = localStorage.getItem('spudDefinitiveSave');
             if(saved) {
                 const parsed = JSON.parse(saved);
-                // Backward-compatibility configuration injection safety checks
                 if(!parsed.rankCustoms) parsed.rankCustoms = g.rankCustoms;
-                // Force rank 4 corrections if transitioning older save files
-                if(parsed.rankCustoms[4] && parsed.rankCustoms[4].name === "Gunsford") {
-                    parsed.rankCustoms[4] = { name: "Gun Spud", img: "spud_gun.png" };
+                
+                // Safety loop checker checking missing configurations inside newly added indices 
+                for(let i = 1; i <= 9; i++) {
+                    if(!parsed.rankCustoms[i]) {
+                        parsed.rankCustoms[i] = { name: `Rank Slot ${i}`, img: `spud_rank${i}.png` };
+                    }
                 }
                 g = parsed;
             }
@@ -380,9 +413,12 @@
             if (g.spuds >= 15000) {
                 g.spuds -= 15000;
                 g.rank++;
-                if(g.rank > 4) g.rank = 4; // Max boundaries check capped gracefully
+                if(g.rank > 9) g.rank = 9; // Boundaries cap matching total slots length
                 
                 let activeRankSetup = g.rankCustoms[g.rank];
+                
+                // Evolution power bonuses scaled out dynamically over high levels
+                g.clickPwr += (g.rank * 3); 
                 
                 triggerFx('gold');
                 showToast("EVOLVED TO: " + activeRankSetup.name);
@@ -407,14 +443,13 @@
             updateUI();
         }
 
-        /* --- DEVICE ASSET MODDING SUITE CALCULATIONS --- */
         function handleWorkshopUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
             
             const reader = new FileReader();
             reader.onload = function(e) {
-                tempUploadedImgData = e.target.result; // Saves base64 structural string representation safely
+                tempUploadedImgData = e.target.result;
                 showToast("Image loaded into workshop memory buffer!");
             };
             reader.readAsDataURL(file);
@@ -437,14 +472,12 @@
                 return;
             }
 
-            // Deduct funds and override device parameters
             g.spuds -= 500000;
             g.rankCustoms[targetSlot] = {
                 name: customName,
                 img: tempUploadedImgData
             };
 
-            // Wipe out workshop inputs
             document.getElementById('workshop-name-input').value = "";
             tempUploadedImgData = "";
             
@@ -458,7 +491,7 @@
             let f = false;
 
             if(v === "SuperSpud") { document.getElementById('owner-btn').classList.remove('hidden'); triggerFx('#ff00ff'); f = true; }
-            if(v === "55") { g.clickPwr += 50; triggerFx('white'); f = true; }
+            if(v === "50") { g.clickPwr += 50; triggerFx('white'); f = true; }
             if(v === "TURBO") { g.sps *= 2; triggerFx('cyan'); f = true; }
             if(v === "RICHES") { g.spuds += 250000; triggerFx('gold'); f = true; }
             if(v === "GRAVITY") { document.getElementById('main-spud').style.transform = "translateY(-100px)"; f = true; }
@@ -473,7 +506,12 @@
                     1: { name: "Normal Spud", img: "spud_main.png" },
                     2: { name: "Swag Spud", img: "spud_swag.png" },
                     3: { name: "King Spud", img: "spud_king.png" },
-                    4: { name: "Gun Spud", img: "spud_gun.png" }
+                    4: { name: "Gun Spud", img: "spud_gun.png" },
+                    5: { name: "Rank Slot 5", img: "spud_rank5.png" },
+                    6: { name: "Rank Slot 6", img: "spud_rank6.png" },
+                    7: { name: "Rank Slot 7", img: "spud_rank7.png" },
+                    8: { name: "Rank Slot 8", img: "spud_rank8.png" },
+                    9: { name: "Rank Slot 9", img: "spud_rank9.png" }
                 };
                 triggerFx('blue'); f = true; 
             }
@@ -531,7 +569,6 @@
         function updateUI() {
             let activeRankSetup = g.rankCustoms[g.rank];
 
-            // Core counter variables engine output tracking text blocks
             document.getElementById('spud-count').innerText = Math.floor(g.spuds).toLocaleString();
             document.getElementById('sps-count').innerText = g.sps.toLocaleString();
             document.getElementById('dpc-count').innerText = g.clickPwr.toLocaleString();
@@ -544,18 +581,16 @@
             document.getElementById('main-spud').src = activeRankSetup.img;
             document.getElementById('rank-display').innerText = "Rank: " + activeRankSetup.name;
 
-            // Graying out shop item states dynamic analysis loops
             document.getElementById('btn-fert').disabled = (g.spuds < g.costs.fert);
             document.getElementById('btn-hoe').disabled = (g.spuds < g.costs.hoe);
             document.getElementById('btn-field').disabled = (g.spuds < g.costs.field);
             document.getElementById('btn-factory').disabled = (g.spuds < g.costs.factory);
-            document.getElementById('evolve-btn').disabled = (g.spuds < 15000 || g.rank >= 4);
+            document.getElementById('evolve-btn').disabled = (g.spuds < 15000 || g.rank >= 9);
 
-            // Gray out workshop engine state calculation parameters
             document.getElementById('btn-workshop-inject').disabled = (g.spuds < 500000);
 
-            // Sync visual panels updates dynamically inside admin elements views frames
-            for(let i = 1; i <= 4; i++) {
+            // Dynamically synchronize the admin visualization nodes for all 9 layout cards
+            for(let i = 1; i <= 9; i++) {
                 let imgEl = document.getElementById(`skin-img-${i}`);
                 let txtEl = document.getElementById(`skin-txt-${i}`);
                 if(imgEl && g.rankCustoms[i]) {
